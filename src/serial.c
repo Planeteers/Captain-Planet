@@ -1,4 +1,10 @@
-
+/**
+ *	File Name:		serial.c
+ *	Date Made:		11-10-2011
+ *	Programmer:		Aaron Parker
+ *	Description:	test driver for the serial.h library
+ **/
+ 
 #include "serial.h"
 
 int main()
@@ -10,5 +16,5 @@ int main()
 		printf("returned: %s\n",ibuf);
 	else
 		printf("failed\n");
-	serializer_disconnect();
+	//serializer_disconnect();
 }

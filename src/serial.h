@@ -1,4 +1,9 @@
-
+/**
+ *	File Name:		serial.h
+ *	Date Made:		11-10-2011
+ *	Programmer:		Aaron Parker
+ *	Description:	Serial library for communicating to the serializer board onboard a stinger robot. 
+ **/
 
 #define   BUF_SIZE   64
 #define   LEFT       1
@@ -33,12 +38,13 @@
 
 /*Function prototypes below*/
 
-	void  SerialInit(void) ;
+	void  serializer_connect(void) ;
 	int   SendCommand(void) ;
 	int   Drive(int, int) ;
 	int   PIDinit(void) ;
 	int   IsDone(void) ;
 	int   IllegalCommand(void) ;
+	void  serializer_disconnect(void) ;
 
 
 /*Function definitions go below.*/
@@ -53,12 +59,13 @@ size_t strnlen(const char *s, size_t n)
 
 #ifdef __WIN32
 
-void  SerialInit(void) {}
+void  serializer_connect(void) {}
 int   SendCommand(void) {return 0;}
 int   Drive(int x, int y) {return 0;}
 int   PIDinit(void) {return 0;}
 int   IsDone(void) {return 0;}
 int   IllegalCommand(void) {return 0;}
+void  serializer_disconnect(void) {}
 
 #else
 /*
