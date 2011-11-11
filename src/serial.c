@@ -9,12 +9,29 @@
 
 int main()
 {
+	float begin;
+	float end;
+	int ticks = 1000;
+	int speed = 10;
+	sleep(.7);
+	//printf("begin: %f",begin);
 	serializer_connect();
-	sprintf(obuf,"fw \r");
-	printf("sending command: %s\n",obuf);
-	if(SendCommand()==ACK)
-		printf("returned: %s\n",ibuf);
-	else
-		printf("failed\n");
+	sprintf(obuf,"cfg units 1\r");
+	SendCommand();
+	sprintf(obuf,"clrenc 1 2\r");
+	SendCommand();
+	begin = seconds();
+	sleep(.7);
+	begin = seconds();
+	Drive(ticks,speed);
+	while(!IsDone());
+	end = seconds();
+	sprintf(obuf,"getenc 1 2\r");
+	SendCommand();
+	printf("%s",ibuf);
+	printf("begin: %f\n", begin);
+	printf("end: %f\n", end);
+	printf("difference: %f\n\n",end - begin);
+	printf("ticks/second: %f\n",((float)(ticks))/(end-begin));
 	//serializer_disconnect();
 }
