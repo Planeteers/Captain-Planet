@@ -12,7 +12,7 @@
 #define   NACK       0
 #define   TRUE       1
 #define   FALSE      0
-#define   CHAR_DLY	 0.002
+#define   CHAR_DLY	 0.02
 
 #include <fcntl.h>
 #include <unistd.h>

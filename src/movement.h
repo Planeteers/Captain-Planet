@@ -32,7 +32,7 @@
  {
 	 int rticks = (int)(rdistance*(TICKS_PER_REV/WHEEL_CIRC));
 	 int lticks = (int)(ldistance*(TICKS_PER_REV/WHEEL_CIRC));
-	 sprintf(obuf,"digo 1:%d:%d 2:%d:%d",rticks,rspeed,lticks,lspeed);
+	 sprintf(obuf,"digo 1:%d:%d 2:%d:%d \r",rticks,rspeed,lticks,lspeed);
 	 return SendCommand();
  }
 
