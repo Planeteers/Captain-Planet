@@ -9,23 +9,10 @@ int main()
 	int speed = 10;
 	
 	serializer_connect();
-	moveForward(12.,speed);
-	/*while(!IsDone());
-	turnLeft(-90.,speed);
-	while(!IsDone());
-	moveForward(4.*12.,speed);
-	while(!IsDone());
-	turnLeft(-180.,speed);
-	while(!IsDone());
-	moveForward(4.*12.,speed);
-	while(!IsDone());
-	turnLeft(90.,speed);
-	while(!IsDone());
-	moveForward(8.*12.,speed);
-	while(!IsDone());
-	turnLeft(180.,speed);
-	while(!IsDone());
-	printf("done!");*/
+	move_forward_at(speed);
+	turn_left_at(speed);
+	turn_right_at(speed);
+	move_backward_at(speed);
 	serializer_disconnect();
 }
 

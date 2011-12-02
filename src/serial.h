@@ -66,6 +66,7 @@ int   PIDinit(void) {return 0;}
 int   IsDone(void) {return 0;}
 int   IllegalCommand(void) {return 0;}
 void  serializer_disconnect(void) {}
+void  send_psoc();
 
 #else
 /*
