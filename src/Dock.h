@@ -88,7 +88,7 @@ void dock(int corner)
 		moveFoward(11,10);
 	else
 		moveFoward(11,-10);
-	send_Charge_Signal(corner);
+	charge(corner);
 		
 }
 
