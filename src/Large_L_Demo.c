@@ -13,11 +13,11 @@ int main()
 	block_digo_done();
 	turn_right(90.,speed);
 	block_digo_done();
-	move_forward(3.*12.0,speed);
+	move_forward(4.*12.0,speed);
 	block_digo_done();
 	turn_right(180.,speed);
 	block_digo_done();
-	move_forward(3.*12.0,speed);
+	move_forward(4.*12.0,speed);
 	block_digo_done();
 	turn_left(90.,speed);
 	block_digo_done();

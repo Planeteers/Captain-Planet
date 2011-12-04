@@ -8,13 +8,14 @@
  #include "serial.h"
  
  #define WHEEL_DIAMETER 2.25 //inches
- #define TICKS_PER_REV 450//450.0 //ish
+ #define TICKS_PER_REV_RIGHT 463.0//450.0 //ish
+ #define TICKS_PER_REV_LEFT  463.0
  #define SECONDS_PER_LOOP 0.021
  #define PIE 3.14159
  #define WHEEL_CIRC (WHEEL_DIAMETER*PIE)
  #define TICKS_PER_DISTANCE
  
- #define WHEEL_BASE 9.5 //inches
+ #define WHEEL_BASE 9.03 //inches
  
  int block_digo_done();
  int is_digo_done();
@@ -69,10 +70,10 @@
   **/
  int drive_direct(int rspeed, float rdistance, int lspeed, float ldistance)
  {
-	 int rticks = (int)(rdistance*(TICKS_PER_REV/WHEEL_CIRC));
-	 int lticks = (int)(ldistance*(TICKS_PER_REV/WHEEL_CIRC));
-	 sprintf(obuf,"digo 1:%d:%d 2:%d:%d \r",rticks,rspeed,lticks,lspeed);
-	 printf("(r,l): (%d,%d)\n",rticks,lticks);
+	 float rticks = (rdistance*(TICKS_PER_REV_RIGHT/WHEEL_CIRC));
+	 float lticks = (ldistance*(TICKS_PER_REV_LEFT/WHEEL_CIRC));
+	 sprintf(obuf,"digo 1:%d:%d 2:%d:%d \r",(int)rticks,rspeed,(int)lticks,lspeed);
+	 printf("(r,l): (%f,%f)\n",rticks,lticks);
 	 return SendCommand();
  }
  
@@ -122,7 +123,7 @@
   **/
  int turn_left(float degrees, int speed)
  {
-	 int arc_length = (WHEEL_BASE*PIE)/360.0*degrees;
+	 float arc_length = (WHEEL_BASE*PIE)/360.0*degrees;
 	 
 	 return drive_direct(speed,arc_length,speed,-arc_length);
  }
