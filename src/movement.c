@@ -9,10 +9,10 @@ int main()
 	int speed = 10;
 	
 	serializer_connect();
-	move_forward_at(speed);
-	turn_left_at(speed);
-	turn_right_at(speed);
-	move_backward_at(speed);
+	turn_left(360.,speed);
+	block_digo_done();
+	//stop();
+	printf("done!\n");
 	serializer_disconnect();
 }
 

@@ -8,14 +8,16 @@
  #include "serial.h"
  
  #define WHEEL_DIAMETER 2.25 //inches
- #define TICKS_PER_REV 450.0 //ish
+ #define TICKS_PER_REV 450//450.0 //ish
  #define SECONDS_PER_LOOP 0.021
  #define PIE 3.14159
  #define WHEEL_CIRC (WHEEL_DIAMETER*PIE)
  #define TICKS_PER_DISTANCE
  
- #define WHEEL_BASE 8.5 //inches
+ #define WHEEL_BASE 9.5 //inches
  
+ int block_digo_done();
+ int is_digo_done();
  int move_forward(float distance, int speed);
  int move_backward(float distance, int speed);
  int move_forward_at(int speed);
@@ -27,6 +29,24 @@
  int turn_left_at(int speed);
  int turn_right_at(int speed);
  
+ int block_digo_done()
+ {
+	 while(!is_digo_done());
+	 return 1;
+ }
+ 
+ int is_digo_done()
+ {
+	 sprintf(obuf,"pids \r");
+	 if(SendCommand())
+	 {
+		 //printf("{%c,%c,%c}\n",ibuf[0],ibuf[1],ibuf[2]);
+		 if(ibuf[2] == '1')
+			return 0;
+		 else return 1;
+	 }
+	 return NACK;
+ }
  
  /**
   * Moves forward Distance at speed rating. distance is in inches and speed is 1-15
@@ -52,6 +72,7 @@
 	 int rticks = (int)(rdistance*(TICKS_PER_REV/WHEEL_CIRC));
 	 int lticks = (int)(ldistance*(TICKS_PER_REV/WHEEL_CIRC));
 	 sprintf(obuf,"digo 1:%d:%d 2:%d:%d \r",rticks,rspeed,lticks,lspeed);
+	 printf("(r,l): (%d,%d)\n",rticks,lticks);
 	 return SendCommand();
  }
  
@@ -103,7 +124,7 @@
  {
 	 int arc_length = (WHEEL_BASE*PIE)/360.0*degrees;
 	 
-	 return drive_direct(speed,-arc_length,speed,arc_length);
+	 return drive_direct(speed,arc_length,speed,-arc_length);
  }
 
  /**
@@ -112,4 +133,13 @@
  int turn_right(float degrees, int speed)
  {
 	 return turn_left(-degrees, speed);
+ }
+ 
+ /**
+  * 
+  **/
+ int stop()
+ {
+	 sprintf(obuf,"stop \r");
+	 return SendCommand();
  }
