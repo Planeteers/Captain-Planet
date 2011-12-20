@@ -29,6 +29,23 @@
  int turn_right(float degrees, int speed);
  int turn_left_at(int speed);
  int turn_right_at(int speed);
+ int print_encoders();
+ 
+ int print_encoders()
+ {
+     sprintf(obuf,"getenc 1 2\r");
+     if(SendCommand())
+     {
+         int i;
+         for(i = 1;i < 20;i++)
+         {
+             if(ibuf[i] != '\n' && ibuf[i] != '>')
+                printf("%c",ibuf[i]);
+         }
+         printf("\n");
+     }
+     return NACK;
+ }
  
  int block_digo_done()
  {
