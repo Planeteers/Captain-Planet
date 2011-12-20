@@ -146,6 +146,13 @@ int IsDone()
     
 }
 
+int SetGPIO(int pin, int value)
+{
+    sprintf(obuf,"setio %d:%d",pin,value);
+    if(!SendCommand()) return FALSE;
+    return TRUE;
+}
+
 // Routine to send the Serializer a bad command
 
 int  IllegalCommand()

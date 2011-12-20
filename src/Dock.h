@@ -7,7 +7,7 @@
 
 #define left 8
 #define right 9
-#define light 1
+#define solar 1
 #define hydro 2
 #define wind 3
 #define none 4
@@ -50,10 +50,30 @@ void realign(int corner)
     }
 }
 
-//No idea what this function does.
+/**
+ * Signals serializer of which charge mode to currently be in.
+ **/
 void send_Charge_Signal(int corner)
 {
-    serial_Charge(corner);
+    switch (corner)
+    {
+        case none:
+            setGPIO(0,0);
+            setGPIO(1,0);
+            break;
+        case solar:
+            setGPIO(0,0);
+            setGPIO(1,1);
+            break;
+        case hydro:
+            setGPIO(0,1);
+            setGPIO(1,0);
+            break;
+        case discharge:
+            setGPIO(0,1);
+            setGPIO(1,1);
+            break;
+    }
 }
 
 void bar_Straight()
