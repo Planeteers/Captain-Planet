@@ -7,7 +7,7 @@
  
  #include "serial.h"
  
- #define WHEEL_DIAMETER 2.25 //inches
+ #define WHEEL_DIAMETER 2.375 //inches
  #define TICKS_PER_REV_RIGHT 463.0//450.0 //ish
  #define TICKS_PER_REV_LEFT  463.0
  #define SECONDS_PER_LOOP 0.021
@@ -15,7 +15,7 @@
  #define WHEEL_CIRC (WHEEL_DIAMETER*PIE)
  #define TICKS_PER_DISTANCE
  
- #define WHEEL_BASE 9.03 //inches
+ #define WHEEL_BASE 9.125
  
  int block_digo_done();
  int is_digo_done();
@@ -29,6 +29,22 @@
  int turn_right(float degrees, int speed);
  int turn_left_at(int speed);
  int turn_right_at(int speed);
+ 
+ int print_encoders()
+ {
+	 sprintf(obuf,"getenc 1 2\r");
+	 if(SendCommand())
+	 {
+		 int i;
+		 for(i = 1;i < 20;i++)
+		 {
+			 if(ibuf[i] != '\n' && ibuf[i] != '>')
+				printf("%c",ibuf[i]);
+		 }
+		 printf("\n");
+	 }
+	 return NACK;
+ }
  
  int block_digo_done()
  {
@@ -133,7 +149,9 @@
   **/
  int turn_right(float degrees, int speed)
  {
-	 return turn_left(-degrees, speed);
+	 float arc_length = (WHEEL_BASE*PIE)/360.0*degrees;
+	 
+	 return drive_direct(speed,-arc_length,speed,arc_length);
  }
  
  /**
