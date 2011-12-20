@@ -1,11 +1,4 @@
 Aaron:
 
-	BasicMovement.h
-	1. drive_direct(int rwv,int lwv)
-	2. move_forward_at(int vel);
-	3. move_backward_at(int vel);
-	4. turn_left_at(int ang_vel);
-	5. turn_right_at(int ang_vel);
-
-	Serial.h
-	1. command for sending psoc serial message via serializer gpio 
+    Serial.h
+    1. command for sending psoc serial message via serializer gpio 

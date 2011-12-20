@@ -1,8 +1,8 @@
 /**
- *	File Name:		serial.h
- *	Date Made:		11-10-2011
- *	Programmer:		Aaron Parker
- *	Description:	Serial library for communicating to the serializer board onboard a stinger robot. 
+ *  File Name:   Serial.h
+ *  Date Made:   11-10-2011
+ *  Programmer:  Aaron Parker
+ *  Description: Serial library for communicating to the serializer board onboard a stinger robot. 
  **/
 
 #define   BUF_SIZE   64
@@ -12,7 +12,7 @@
 #define   NACK       0
 #define   TRUE       1
 #define   FALSE      0
-#define   CHAR_DLY	 0.001
+#define   CHAR_DLY   0.001
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -31,20 +31,20 @@
 
 // Serial input and outpus buffers
 
-	char   ibuf[BUF_SIZE] = "" ;
-	char   obuf[BUF_SIZE] = "" ;
-	char   NACKstr[]= "NACK" ;
-	int    SERIALIZER ;
+    char   ibuf[BUF_SIZE] = "" ;
+    char   obuf[BUF_SIZE] = "" ;
+    char   NACKstr[]= "NACK" ;
+    int    SERIALIZER ;
 
 /*Function prototypes below*/
 
-	void  serializer_connect(void) ;
-	int   SendCommand(void) ;
-	int   Drive(int, int) ;
-	int   PIDinit(void) ;
-	int   IsDone(void) ;
-	int   IllegalCommand(void) ;
-	void  serializer_disconnect(void) ;
+    void  serializer_connect(void) ;
+    int   SendCommand(void) ;
+    int   Drive(int, int) ;
+    int   PIDinit(void) ;
+    int   IsDone(void) ;
+    int   IllegalCommand(void) ;
+    void  serializer_disconnect(void) ;
 
 
 /*Function definitions go below.*/
@@ -73,23 +73,23 @@ void  send_psoc();
  *  Function to initialize the serial port on back of CBC
 */
 void serializer_connect() {
-	
-	int     fd = -1 ;
-	struct  termios oldtio,newtio;
-	
-	fd = open(CREATE_UART, O_RDWR | O_NONBLOCK);
-	if (fd<0) {
-		perror(CREATE_UART); 
-		printf("Serial port init failed ... aborting!\r") ;
-		exit(-1);
-	}
-	tcgetattr(fd,&oldtio);
-	bzero(&newtio, sizeof(newtio));
-	newtio.c_cflag = CS8 | CREAD;
-	tcflush(fd, TCIOFLUSH);
-	tcsetattr(fd,TCSANOW,&newtio);	
-	SERIALIZER = fd ;
-	
+    
+    int     fd = -1 ;
+    struct  termios oldtio,newtio;
+    
+    fd = open(CREATE_UART, O_RDWR | O_NONBLOCK);
+    if (fd<0) {
+        perror(CREATE_UART); 
+        printf("Serial port init failed ... aborting!\r") ;
+        exit(-1);
+    }
+    tcgetattr(fd,&oldtio);
+    bzero(&newtio, sizeof(newtio));
+    newtio.c_cflag = CS8 | CREAD;
+    tcflush(fd, TCIOFLUSH);
+    tcsetattr(fd,TCSANOW,&newtio);  
+    SERIALIZER = fd ;
+    
     return ;
 }
 
@@ -101,33 +101,33 @@ void serializer_connect() {
 
 int SendCommand() 
 {
-	int   bytes_read ;
-	
+    int   bytes_read ;
+    
     write(SERIALIZER, obuf, strnlen(obuf, BUF_SIZE));
-	sleep(BUF_SIZE * CHAR_DLY) ; // wait for response from Serializer
-	bytes_read = read(SERIALIZER, ibuf, BUF_SIZE);  // get the response
-	if ( (bytes_read != 0) && (strstr(ibuf, NACKstr) == NULL) ) return ACK ;
-	else return NACK ;
+    sleep(BUF_SIZE * CHAR_DLY) ; // wait for response from Serializer
+    bytes_read = read(SERIALIZER, ibuf, BUF_SIZE);  // get the response
+    if ( (bytes_read != 0) && (strstr(ibuf, NACKstr) == NULL) ) return ACK ;
+    else return NACK ;
 }
 
 
 // Set PID default parameters for Stinger platform
 
 int PIDinit() 
-{		
-	sprintf(obuf, "rpid s\r") ;	
-	if(SendCommand()) return ACK ;	
-	else return NACK ;
+{       
+    sprintf(obuf, "rpid s\r") ; 
+    if(SendCommand()) return ACK ;  
+    else return NACK ;
 }
 
 // Routine used to drive the Stinger specified distance at specified velocity
 
 int  Drive(int DistInTics, int VelInTics)
 {
-	sprintf(obuf, "digo %d:%d:%d %d:%d:%d\r", 
-	        LEFT, DistInTics, VelInTics, RIGHT, DistInTics, VelInTics) ;	
-	if (SendCommand()) return ACK ;
-	else return NACK ;
+    sprintf(obuf, "digo %d:%d:%d %d:%d:%d\r", 
+            LEFT, DistInTics, VelInTics, RIGHT, DistInTics, VelInTics) ;    
+    if (SendCommand()) return ACK ;
+    else return NACK ;
 }
 
 // Routine to check if Serializer is ready to accept a new digo command
@@ -139,25 +139,25 @@ int  Drive(int DistInTics, int VelInTics)
 
 int IsDone() 
 {
-	sprintf(obuf, "pids\r") ;	
-	if (!SendCommand()) return FALSE ;
-	if (ibuf[2] == '0') return TRUE ;
-	else return FALSE ;
-	
+    sprintf(obuf, "pids\r") ;   
+    if (!SendCommand()) return FALSE ;
+    if (ibuf[2] == '0') return TRUE ;
+    else return FALSE ;
+    
 }
 
 // Routine to send the Serializer a bad command
 
 int  IllegalCommand()
 {
-	sprintf(obuf, "gle 0 1\r") ;	// No such command
-	if (SendCommand()) return ACK ;
-	else return NACK ;
+    sprintf(obuf, "gle 0 1\r") ;    // No such command
+    if (SendCommand()) return ACK ;
+    else return NACK ;
 }
 
 void serializer_disconnect()
 {
-	close(SERIALIZER);
+    close(SERIALIZER);
 }
 #endif
 
