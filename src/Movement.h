@@ -1,11 +1,11 @@
 /**
- * File Name:	Movement.h
- * Date Made:	11-10-2011
- * Programmer:	Aaron Parker & David Lynn
- * Description:	Basic movement library for serializer.
+ * File Name:   Movement.h
+ * Date Made:   11-10-2011
+ * Programmer:  Aaron Parker & David Lynn
+ * Description: Basic movement library for serializer.
  **/
  
- #include "serial.h"
+ #include "Serial.h"
  
  #define WHEEL_DIAMETER 2.25 //inches
  #define TICKS_PER_REV_RIGHT 463.0//450.0 //ish
@@ -32,21 +32,21 @@
  
  int block_digo_done()
  {
-	 while(!is_digo_done());
-	 return 1;
+     while(!is_digo_done());
+     return 1;
  }
  
  int is_digo_done()
  {
-	 sprintf(obuf,"pids \r");
-	 if(SendCommand())
-	 {
-		 //printf("{%c,%c,%c}\n",ibuf[0],ibuf[1],ibuf[2]);
-		 if(ibuf[2] == '1')
-			return 0;
-		 else return 1;
-	 }
-	 return NACK;
+     sprintf(obuf,"pids \r");
+     if(SendCommand())
+     {
+         //printf("{%c,%c,%c}\n",ibuf[0],ibuf[1],ibuf[2]);
+         if(ibuf[2] == '1')
+            return 0;
+         else return 1;
+     }
+     return NACK;
  }
  
  /**
@@ -54,7 +54,7 @@
   **/
  int move_forward(float distance, int speed)
  { 
-	 return drive_direct(speed,distance,speed,distance);
+     return drive_direct(speed,distance,speed,distance);
  }
  
  /**
@@ -62,7 +62,7 @@
   **/
  int move_backward(float distance, int speed)
  {
-	 return move_forward(-distance, speed);
+     return move_forward(-distance, speed);
  }
  
  /**
@@ -70,70 +70,70 @@
   **/
  int drive_direct(int rspeed, float rdistance, int lspeed, float ldistance)
  {
-	 float rticks = (rdistance*(TICKS_PER_REV_RIGHT/WHEEL_CIRC));
-	 float lticks = (ldistance*(TICKS_PER_REV_LEFT/WHEEL_CIRC));
-	 sprintf(obuf,"digo 1:%d:%d 2:%d:%d \r",(int)rticks,rspeed,(int)lticks,lspeed);
-	 printf("(r,l): (%f,%f)\n",rticks,lticks);
-	 return SendCommand();
+     float rticks = (rdistance*(TICKS_PER_REV_RIGHT/WHEEL_CIRC));
+     float lticks = (ldistance*(TICKS_PER_REV_LEFT/WHEEL_CIRC));
+     sprintf(obuf,"digo 1:%d:%d 2:%d:%d \r",(int)rticks,rspeed,(int)lticks,lspeed);
+     printf("(r,l): (%f,%f)\n",rticks,lticks);
+     return SendCommand();
  }
  
  /**
-  *	Direct drive using only velocity control. (1-15)
+  * Direct drive using only velocity control. (1-15)
   **/
  int drive_direct_at(int rspeed, int lspeed)
  {
-	 sprintf(obuf,"mogo 1:%d 2:%d \r",rspeed,lspeed);
-	 return SendCommand();
+     sprintf(obuf,"mogo 1:%d 2:%d \r",rspeed,lspeed);
+     return SendCommand();
  }
  
  /**
-  *	Drive forward at speed
+  * Drive forward at speed
   **/
  int move_forward_at(int speed)
  {
-	 return drive_direct_at(speed, speed);
+     return drive_direct_at(speed, speed);
  }
  
  /**
-  *	Drive backward at speed
+  * Drive backward at speed
   **/
  int move_backward_at(int speed)
  {
-	 return drive_direct_at(-speed,-speed);
+     return drive_direct_at(-speed,-speed);
  }
  
  /**
-  *	turns left at speed
+  * turns left at speed
   **/
  int turn_left_at(int speed)
  {
-	 return drive_direct_at(speed,-speed);
+     return drive_direct_at(speed,-speed);
  }
  
  /**
-  *	turns right at speed
+  * turns right at speed
   **/
  int turn_right_at(int speed)
  {
-	 return drive_direct_at(-speed,speed);
+     return drive_direct_at(-speed,speed);
  }
  
  /**
-  *	turns left specifed number of degrees at speed (1-15)
+  * turns left specifed number of degrees at speed (1-15)
   **/
  int turn_left(float degrees, int speed)
  {
-	 float arc_length = (WHEEL_BASE*PIE)/360.0*degrees;
-	 
-	 return drive_direct(speed,arc_length,speed,-arc_length);
+     float arc_length = (WHEEL_BASE*PIE)/360.0*degrees;
+     
+     return drive_direct(speed,arc_length,speed,-arc_length);
  }
 
  /**
-  *	turns right specified number of degrees at speed (1-15)
+  * turns right specified number of degrees at speed (1-15)
   **/
  int turn_right(float degrees, int speed)
  {
-	 return turn_left(-degrees, speed);
+     return turn_left(-degrees, speed);
  }
  
  /**
@@ -141,6 +141,6 @@
   **/
  int stop()
  {
-	 sprintf(obuf,"stop \r");
-	 return SendCommand();
+     sprintf(obuf,"stop \r");
+     return SendCommand();
  }
