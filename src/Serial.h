@@ -148,7 +148,7 @@ int IsDone()
 
 int SetGPIO(int pin, int value)
 {
-    sprintf(obuf,"setio %d:%d",pin,value);
+    sprintf(obuf,"setio %d:%d\r",pin,value);
     if(!SendCommand()) return FALSE;
     return TRUE;
 }
