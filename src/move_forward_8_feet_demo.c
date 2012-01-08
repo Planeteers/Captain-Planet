@@ -12,7 +12,7 @@ int main()
     int speed = 10;
     
     serializer_connect();
-    move_forward(12.0,speed);
+    move_forward(12.0*8.0,speed);
     block_digo_done();
 	print_encoders();
     serializer_disconnect();
