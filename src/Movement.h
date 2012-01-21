@@ -89,7 +89,7 @@
  {
      float rticks = (rdistance*(TICKS_PER_REV_RIGHT/WHEEL_CIRC));
      float lticks = (ldistance*(TICKS_PER_REV_LEFT/WHEEL_CIRC));
-     sprintf(obuf,"digo 1:%d:%d 2:%d:%d \r",(int)rticks,rspeed,(int)lticks,lspeed);
+     sprintf(obuf,"digo 2:%d:%d 1:%d:%d \r",(int)rticks,rspeed,(int)lticks,lspeed);
      printf("(r,l): (%f,%f)\n",rticks,lticks);
      return SendCommand();
  }
