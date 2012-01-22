@@ -7,17 +7,56 @@
 
 #include <stdio.h>
 #include <math.h>
-#define thetaOne 0
-#define thetaTwo 6
+#define thetaOne 0.0
+#define thetaTwo 8.0 
+#define pie 3.14159
 
-int analogToInches(int port)
+float analog_to_inches(int);
+float analog_to_inches_avg(int, int);
+float radian_to_degree(float);
+float degree_to_radian(float);
+float angle_off_set(int, int);
+int see_bar(int);
+int bar_sensor(int, int);
+
+float analog_to_inches(int port)
 {
-    return (5027.9*pow(analog10(port),1.086));
-    //set_each_analog_state(1,1,1,1,1,1,0,0);
+    return (5027.9*pow(analog10(port),-1.086));
 }
 
-int angleOffSet(int port1, int port2)
+float analog_to_inches_avg(int port,int iterations)
 {
-    return(atan2(analogToInches(port1)-analogToInches(port2)-thetaOne,thetaTwo));
+	float avg = 0;
+	int i;
+	for(i=0;i<iterations;i++)
+	{
+		avg+=analog_to_inches(port);
+	}
+	return (avg/((float)iterations));
 }
 
+float radian_to_degree(float radians)
+{
+	return(radians*(180.0/pie));
+}
+
+float degree_to_radian(float degree)
+{
+	return(degree*(pie/180));
+}
+
+float angle_off_set(int port1, int port2)
+{
+	float radians = atan2(analog_to_inches_avg(port1, 10)-analog_to_inches_avg(port2, 10),thetaTwo);
+    return(radian_to_degree(radians));
+}
+
+int see_bar(int port1)
+{
+	return(!digital(port1));
+}
+
+int bar_sensor(int port1, int port2)
+{
+	return(see_bar(port1) && see_bar(port2));
+}
