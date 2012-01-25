@@ -15,7 +15,7 @@
  #define WHEEL_CIRC (WHEEL_DIAMETER*PIE)
  #define TICKS_PER_DISTANCE
  
- #define WHEEL_BASE 9.03 //inches
+ #define WHEEL_BASE 8.60 //inches
  
  int block_digo_done();
  int is_digo_done();
