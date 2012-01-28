@@ -36,7 +36,7 @@
  int distance_traveled()
  {
 	 sprintf(obuf,"getenc 1 2\r");
-	 if(SendCommand())
+	 if(send_command())
 	 {
 		 //printf("%s",ibuf);
 		 int number1,number2;
@@ -48,7 +48,7 @@
  int print_encoders()
  {
      sprintf(obuf,"getenc 1 2\r");
-     if(SendCommand())
+     if(send_command())
      {
          int i;
          for(i = 1;i < 20;i++)
@@ -70,7 +70,7 @@
  int is_digo_done()
  {
      sprintf(obuf,"pids \r");
-     if(SendCommand())
+     if(send_command())
      {
          //printf("{%c,%c,%c}\n",ibuf[0],ibuf[1],ibuf[2]);
          if(ibuf[2] == '1')
@@ -105,7 +105,7 @@
      float lticks = (ldistance*(TICKS_PER_REV_LEFT/WHEEL_CIRC));
      sprintf(obuf,"digo 2:%d:%d 1:%d:%d \r",(int)rticks,rspeed,(int)lticks,lspeed);
      printf("(r,l): (%f,%f)\n",rticks,lticks);
-     return SendCommand();
+     return send_command();
  }
  
  /**
@@ -114,7 +114,7 @@
  int drive_direct_at(int rspeed, int lspeed)
  {
      sprintf(obuf,"mogo 1:%d 2:%d \r",rspeed,lspeed);
-     return SendCommand();
+     return send_command();
  }
  
  /**
@@ -173,7 +173,7 @@
  int stop()
  {
      sprintf(obuf,"stop \r");
-     return SendCommand();
+     return send_command();
  }
  
  #endif

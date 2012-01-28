@@ -21,10 +21,10 @@
 #define DOCK_H
 
 void docking_phase();
-int scanCode();
+int scan_code();
 void realign(int);
-void send_Charge_Signal(int);
-void bar_Straight();
+void send_charge_signal(int);
+void bar_straight();
 int charge(int);
 void dock(int);
 void undock(int);
@@ -40,16 +40,16 @@ void align_with_bar()
 			drive_direct_at(3, -1);
 	}
 	stop();
-	int code = scanCode();
+	int code = scan_code();
 	printf("Barcode Number: %d", code);
 }
 
-int scanCode()
+int scan_code()
 {
     int code = 0;
     if(!bar_sensor(topHat1, topHat2))
     {
-        move_forward(.4, -10);
+        move_forward_at(10);
         while(!bar_sensor(topHat1, topHat2));
         stop();
     }
@@ -57,7 +57,6 @@ int scanCode()
 	int i = 0;
     for(i=0; i<3; i++)
     {
-        move_foward(1,10);
         if(!bar_sensor(topHat1, topHat2))
             break;
         code++;
@@ -89,20 +88,20 @@ void send_charge_signal(int corner)
     switch (corner)
     {
         case none:
-            setGPIO(0,0);
-            setGPIO(1,0);
+            set_gpio(0,0);
+            set_gpio(1,0);
             break;
         case solar:
-            setGPIO(0,0);
-            setGPIO(1,1);
+            set_gpio(0,0);
+            set_gpio(1,1);
             break;
         case hydro:
-            setGPIO(0,1);
-            setGPIO(1,0);
+            set_gpio(0,1);
+            set_gpio(1,0);
             break;
         case discharge:
-            setGPIO(0,1);
-            setGPIO(1,1);
+            set_gpio(0,1);
+            set_gpio(1,1);
             break;
     }
 }
@@ -127,25 +126,25 @@ void bar_straight()
         {
             rPrevSensorSpeed = rCurSensorSpeed;
             lPrevSensorSpeed = lCurSensorSpeed;
-            drive_Direct(rCurSensorSpeed, lCurSensorSpeed);
+            drive_direct(rCurSensorSpeed, 10,lCurSensorSpeed, 10);
         }
     }
 }
 
 int charge(int corner)
 {
-    send_Charge_Signal(corner);
-    while(charging())
-    sleep(1);
-    send_Charge_Signal(none);
+    send_charge_signal(corner);
+   // while(charging())
+    //sleep(1);
+    //send_Charge_Signal(none);
 }
 
 void dock(int corner)
 {
     if(corner != wind)
-        moveFoward(11,10);
+        move_forward(11,10);
     else
-        moveFoward(11,-10);
+        move_forward(11,-10);
     charge(corner);
         
 }
@@ -154,11 +153,11 @@ void undock(int corner)
 {
     if(corner != wind)
     {
-        moveFoward(14, -10);
-        turnLeft(180, 10);
+        move_forward(14, -10);
+        turn_left(180, 10);
     }   
     else
-        moveFoward(14, 10);
+        move_forward(14, 10);
 }
 
 #endif

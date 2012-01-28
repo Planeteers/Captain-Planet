@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <math.h>
+
 #define thetaOne 0.0
 #define thetaTwo 8.0 
 #define pie 3.14159

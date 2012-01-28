@@ -42,11 +42,11 @@
 /*Function prototypes below*/
 
     void  serializer_connect(void) ;
-    int   SendCommand(void) ;
-    int   Drive(int, int) ;
-    int   PIDinit(void) ;
-    int   IsDone(void) ;
-    int   IllegalCommand(void) ;
+    int   send_command(void) ;
+    int   drive(int, int) ;
+    int   pid_init(void) ;
+    int   is_done(void) ;
+    int   illegal_command(void) ;
     void  serializer_disconnect(void) ;
 
 
@@ -63,13 +63,12 @@ size_t strnlen(const char *s, size_t n)
 #ifdef __WIN32
 
 void  serializer_connect(void) {}
-int   SendCommand(void) {return 0;}
-int   Drive(int x, int y) {return 0;}
-int   PIDinit(void) {return 0;}
-int   IsDone(void) {return 0;}
-int   IllegalCommand(void) {return 0;}
+int   send_command(void) {return 0;}
+int   drive(int x, int y) {return 0;}
+int   pid_init(void) {return 0;}
+int   is_done(void) {return 0;}
+int   illegal_command(void) {return 0;}
 void  serializer_disconnect(void) {}
-void  send_psoc();
 
 #else
 /*
@@ -102,7 +101,7 @@ void serializer_connect() {
  * Waits for response from the Serializer which is placed in ibuf.
 */
 
-int SendCommand() 
+int send_command() 
 {
     int   bytes_read ;
     
@@ -116,20 +115,20 @@ int SendCommand()
 
 // Set PID default parameters for Stinger platform
 
-int PIDinit() 
+int pid_init() 
 {       
     sprintf(obuf, "rpid s\r") ; 
-    if(SendCommand()) return ACK ;  
+    if(send_command()) return ACK ;  
     else return NACK ;
 }
 
 // Routine used to drive the Stinger specified distance at specified velocity
 
-int  Drive(int DistInTics, int VelInTics)
+int  drive(int DistInTics, int VelInTics)
 {
     sprintf(obuf, "digo %d:%d:%d %d:%d:%d\r", 
             LEFT, DistInTics, VelInTics, RIGHT, DistInTics, VelInTics) ;    
-    if (SendCommand()) return ACK ;
+    if (send_command()) return ACK ;
     else return NACK ;
 }
 
@@ -140,28 +139,28 @@ int  Drive(int DistInTics, int VelInTics)
 // ibuf[0] is CR, ibuf[1] is LF
 //
 
-int IsDone() 
+int is_done() 
 {
     sprintf(obuf, "pids\r") ;   
-    if (!SendCommand()) return FALSE ;
+    if (!send_command()) return FALSE ;
     if (ibuf[2] == '0') return TRUE ;
     else return FALSE ;
     
 }
 
-int SetGPIO(int pin, int value)
+int set_gpio(int pin, int value)
 {
     sprintf(obuf,"setio %d:%d\r",pin,value);
-    if(!SendCommand()) return FALSE;
+    if(!send_command()) return FALSE;
     return TRUE;
 }
 
 // Routine to send the Serializer a bad command
 
-int  IllegalCommand()
+int  illegal_command()
 {
     sprintf(obuf, "gle 0 1\r") ;    // No such command
-    if (SendCommand()) return ACK ;
+    if (send_command()) return ACK ;
     else return NACK ;
 }
 
