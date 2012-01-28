@@ -10,6 +10,11 @@
 #define thetaOne 0.0
 #define thetaTwo 8.0 
 #define pie 3.14159
+#define topHat1 14
+#define topHat2 15
+
+#ifndef SENSOR_H
+#define SENSOR_H
 
 float analog_to_inches(int);
 float analog_to_inches_avg(int, int);
@@ -60,3 +65,5 @@ int bar_sensor(int port1, int port2)
 {
 	return(see_bar(port1) && see_bar(port2));
 }
+
+#endif
