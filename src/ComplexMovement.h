@@ -5,10 +5,9 @@
  *  Description: Complex movements to navigate from one corner of an 8x8 square to another.
  **/
  
- #include "Movement.h"
- #include "Sensor.h"
- #include "Dock.h"
- 
+#include "Movement.h"
+#include "Sensor.h"
+#include "Dock.h"
 #define speed 14
 
 #ifndef COMPLEX_MOVEMENT_H

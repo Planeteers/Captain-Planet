@@ -30,6 +30,14 @@
  int turn_left_at(int speed);
  int turn_right_at(int speed);
  int print_encoders();
+ int distance_traveled()
+ {
+	 sprintf(obuf,"getenc 1 2\r");
+	 if(SendCommand())
+	 {
+		 printf("%s",ibuf);
+	 }
+ }
  
  int print_encoders()
  {
