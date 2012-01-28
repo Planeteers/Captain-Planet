@@ -7,6 +7,9 @@
  
  #include "Serial.h"
  
+ #ifndef MOVEMENT_H
+ #define MOVEMENT_H
+ 
  #define WHEEL_DIAMETER 2.25 //inches
  #define TICKS_PER_REV_RIGHT 463.0//450.0 //ish
  #define TICKS_PER_REV_LEFT  463.0
@@ -35,10 +38,10 @@
 	 sprintf(obuf,"getenc 1 2\r");
 	 if(SendCommand())
 	 {
-		 printf("%s",ibuf);
+		 //printf("%s",ibuf);
 		 int number1,number2;
-		 number1 = atoi(ibuf);
-		 number2 = atoi(ibuf);
+		 //number1 = atoi(ibuf);
+		 //number2 = atoi(ibuf);
 	 }
  }
  
@@ -172,3 +175,5 @@
      sprintf(obuf,"stop \r");
      return SendCommand();
  }
+ 
+ #endif

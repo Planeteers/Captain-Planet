@@ -5,6 +5,9 @@
  *  Description: Serial library for communicating to the serializer board onboard a stinger robot. 
  **/
 
+#ifndef SERIAL_H
+#define SERIAL_H
+
 #define   BUF_SIZE   64
 #define   LEFT       1
 #define   RIGHT      2
@@ -166,5 +169,6 @@ void serializer_disconnect()
 {
     close(SERIALIZER);
 }
+#endif
 #endif
 

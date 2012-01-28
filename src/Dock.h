@@ -50,7 +50,6 @@ int scanCode()
     if(!bar_sensor(topHat1, topHat2))
     {
         move_forward(.4, -10);
-        move_forward(10);
         while(!bar_sensor(topHat1, topHat2));
         stop();
     }
@@ -58,7 +57,7 @@ int scanCode()
 	int i = 0;
     for(i=0; i<3; i++)
     {
-        moveFoward(1,10);
+        move_foward(1,10);
         if(!bar_sensor(topHat1, topHat2))
             break;
         code++;
@@ -70,13 +69,13 @@ void realign(int corner)
 {
     if(corner != wind)
     {
-        turnLeft(5, 10);
+        turn_left(5, 10);
         move_forward(6, -10);
         move_forward(6, 10);
     }
     else
     {
-        turnLeft(-5, 10);
+        turn_left(-5, 10);
         move_forward(6, 10);
         move_forward(6, -10);
     }
@@ -85,7 +84,7 @@ void realign(int corner)
 /**
  * Signals serializer of which charge mode to currently be in.
  **/
-void send_Charge_Signal(int corner)
+void send_charge_signal(int corner)
 {
     switch (corner)
     {
@@ -108,7 +107,7 @@ void send_Charge_Signal(int corner)
     }
 }
 
-void bar_Straight()
+void bar_straight()
 {
     int rCurSensorSpeed = 0;
     int rPrevSensorSpeed = 0;
