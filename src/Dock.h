@@ -29,39 +29,44 @@ int charge(int);
 void dock(int);
 void undock(int);
 
-void align_with_bar()
+
+//Complex Movement leaves us right in front of the cubbie. This will take us to the first barcode.
+void docking_phase()
 {
 	move_forward_at(6);
-    while(!bar_sensor(topHat2,topHat1))
-	{
-		if(see_bar(topHat1))
-			drive_direct_at(-1, 3);
-		else if(see_bar(topHat2))
-			drive_direct_at(3, -1);
-	}
+    bar_straight();
 	stop();
 	int code = scan_code();
 	printf("Barcode Number: %d", code);
 }
 
+//Goes four inches reading each barcode and then returns the barcode
 int scan_code()
 {
-    int code = 0;
-    if(!bar_sensor(topHat1, topHat2))
-    {
-        move_forward_at(10);
-        while(!bar_sensor(topHat1, topHat2));
-        stop();
-    }
-    code++;
-	int i = 0;
-    for(i=0; i<3; i++)
-    {
-        if(!bar_sensor(topHat1, topHat2))
-            break;
-        code++;
-    }
-    return code;
+    int leftCode = 1;
+	int rightCode = 1;
+	int preRight = 0;
+	int preLeft = 0;
+	int curRight = 0;
+	int curLeft = 0;
+
+	
+	move_forward(4, 6);
+	while(!is_digo_done())
+	{
+		curRight = see_bar(topHat1);
+		curLeft = see_bar(topHat2);
+		if(curLeft && !preLeft)
+			leftCode++;
+		if(curRight && !preRight)
+			rightCode++;
+
+		preLeft = curLeft;
+		preRight = curRight;
+	}
+	printf("Barcode Number: %d", leftCode);
+	printf("Barcode Number: %d", rightCode);
+    return leftCode;
 }
 
 void realign(int corner)
@@ -108,27 +113,13 @@ void send_charge_signal(int corner)
 
 void bar_straight()
 {
-    int rCurSensorSpeed = 0;
-    int rPrevSensorSpeed = 0;
-    int lCurSensorSpeed = 0;
-    int lPrevSensorSpeed = 0;
-    while(!bar_sensor(topHat1, topHat2))
-    {
-        if(see_bar(topHat1))
-            lCurSensorSpeed = 100;
-        else
-            lCurSensorSpeed = -100;
-        if(see_bar(topHat2))
-            rCurSensorSpeed = 100;
-        else
-            rCurSensorSpeed = -100;
-        if(rCurSensorSpeed != rPrevSensorSpeed || lCurSensorSpeed != lPrevSensorSpeed)
-        {
-            rPrevSensorSpeed = rCurSensorSpeed;
-            lPrevSensorSpeed = lCurSensorSpeed;
-            drive_direct(rCurSensorSpeed, 10,lCurSensorSpeed, 10);
-        }
-    }
+	while(!bar_sensor(topHat2,topHat1))
+	{
+		if(see_bar(topHat1))
+			drive_direct_at(-1, 3);
+		else if(see_bar(topHat2))
+			drive_direct_at(3, -1);
+	} 
 }
 
 int charge(int corner)

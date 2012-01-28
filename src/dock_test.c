@@ -10,9 +10,7 @@
 int main()
 {
 	serializer_connect();
-	top();
-	turn_left(180.0,14);
-	block_digo_done();
+	docking_phase();
 	serializer_disconnect();
 }
 
