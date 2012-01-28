@@ -37,6 +37,9 @@
 	 if(SendCommand())
 	 {
 		 printf("%s",ibuf);
+		 int number1,number2;
+		 number1 = atoi(ibuf);
+		 number2 = atoi(ibuf);
 	 }
  }
  
