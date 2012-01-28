@@ -4,6 +4,8 @@
  *  Programmer:  David Lynn & Aaron Parker
  *  Description: Defines docking functionality.
  **/
+#include "Sensor.h"
+#include "Movement.h"
 
 #define left 8
 #define right 9
@@ -12,22 +14,52 @@
 #define wind 3
 #define none 4
 #define discharge 5 
+#define topHat1 14
+#define topHat2 15
+
+#ifndef DOCK_H
+#define DOCK_H
+
+void docking_phase();
+int scanCode();
+void realign(int);
+void send_Charge_Signal(int);
+void bar_Straight();
+int charge(int);
+void dock(int);
+void undock(int);
+
+void align_with_bar()
+{
+	move_forward_at(6);
+    while(!bar_sensor(topHat2,topHat1))
+	{
+		if(see_bar(topHat1))
+			drive_direct_at(-1, 3);
+		else if(see_bar(topHat2))
+			drive_direct_at(3, -1);
+	}
+	stop();
+	int code = scanCode();
+	printf("Barcode Number: %d", code);
+}
 
 int scanCode()
 {
     int code = 0;
-    if(!bar_Sensor())
+    if(!bar_sensor(topHat1, topHat2))
     {
-        moveFoward(.4, -10);
-        moveFoward(10);
-        while(!barSensor());
+        move_forward(.4, -10);
+        move_forward(10);
+        while(!bar_sensor(topHat1, topHat2));
         stop();
     }
     code++;
-    for(int i=0; i<3; i++)
+	int i = 0;
+    for(i=0; i<3; i++)
     {
         moveFoward(1,10);
-        if(!bar_Sensor())
+        if(!bar_sensor(topHat1, topHat2))
             break;
         code++;
     }
@@ -39,14 +71,14 @@ void realign(int corner)
     if(corner != wind)
     {
         turnLeft(5, 10);
-        moveFoward(6, -10);
-        moveFoward(6, 10);
+        move_forward(6, -10);
+        move_forward(6, 10);
     }
     else
     {
         turnLeft(-5, 10);
-        moveFoward(6, 10);
-        moveFoward(6, -10);
+        move_forward(6, 10);
+        move_forward(6, -10);
     }
 }
 
@@ -82,13 +114,13 @@ void bar_Straight()
     int rPrevSensorSpeed = 0;
     int lCurSensorSpeed = 0;
     int lPrevSensorSpeed = 0;
-    while(!both_Sensors())
+    while(!bar_sensor(topHat1, topHat2))
     {
-        if(bar_Sensor(left))
+        if(see_bar(topHat1))
             lCurSensorSpeed = 100;
         else
             lCurSensorSpeed = -100;
-        if(bar_Sensor(right))
+        if(see_bar(topHat2))
             rCurSensorSpeed = 100;
         else
             rCurSensorSpeed = -100;
@@ -101,7 +133,7 @@ void bar_Straight()
     }
 }
 
-bool charge(int corner)
+int charge(int corner)
 {
     send_Charge_Signal(corner);
     while(charging())
@@ -129,3 +161,5 @@ void undock(int corner)
     else
         moveFoward(14, 10);
 }
+
+#endif
