@@ -10,7 +10,8 @@
 int main()
 {
 	serializer_connect();
-	docking_phase();
+	top();
+	//docking_phase();
 	serializer_disconnect();
 }
 

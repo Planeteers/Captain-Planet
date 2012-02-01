@@ -64,8 +64,8 @@ int scan_code()
 		preLeft = curLeft;
 		preRight = curRight;
 	}
-	printf("Barcode Number: %d", leftCode);
-	printf("Barcode Number: %d", rightCode);
+	printf("Barcode Left Number: %d", leftCode);
+	printf("Barcode Right Number: %d", rightCode);
     return leftCode;
 }
 

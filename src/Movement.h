@@ -6,6 +6,7 @@
  **/
  
 #include "Serial.h"
+#include "Sensor.h"
  
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
@@ -35,14 +36,15 @@ int turn_right_at(int speed);
 int print_encoders();
 int distance_traveled();
  
-int straighten_off_wall(int right)
+int straighten_off_wall(int right,int speed)
 {
 	float angle;
-	for(int i = 0;i<3;i++)
+	int i;
+	for(i = 0;i<3;i++)
 	{
 		angle = angle_offset(0,1);
 		if(angle < 1.0 && angle > -1.0) return 0;
-		turn_right(angle);
+		turn_right(angle,speed);
 	}
 	return 1;
 }
@@ -125,7 +127,7 @@ int drive_direct(int rspeed, float rdistance, int lspeed, float ldistance)
     float rticks = (rdistance*(TICKS_PER_REV_RIGHT/WHEEL_CIRC));
     float lticks = (ldistance*(TICKS_PER_REV_LEFT/WHEEL_CIRC));
     sprintf(obuf,"digo 2:%d:%d 1:%d:%d \r",(int)rticks,rspeed,(int)lticks,lspeed);
-    printf("(r,l): (%f,%f)\n",rticks,lticks);
+    //printf("(r,l): (%f,%f)\n",rticks,lticks);
     return send_command();
 }
 
