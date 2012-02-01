@@ -14,8 +14,8 @@
 #define wind 3
 #define none 4
 #define discharge 5 
-#define topHat1 14
-#define topHat2 15
+#define leftTopHat 14
+#define rightTopHat 15
 
 #ifndef DOCK_H
 #define DOCK_H
@@ -51,11 +51,11 @@ int scan_code()
 	int curLeft = 0;
 
 	
-	move_forward(4, 6);
+	move_forward(4, 4);
 	while(!is_digo_done())
 	{
-		curRight = see_bar(topHat1);
-		curLeft = see_bar(topHat2);
+		curRight = see_bar(leftTopHat);
+		curLeft = see_bar(rightTopHat);
 		if(curLeft && !preLeft)
 			leftCode++;
 		if(curRight && !preRight)
@@ -113,11 +113,11 @@ void send_charge_signal(int corner)
 
 void bar_straight()
 {
-	while(!bar_sensor(topHat2,topHat1))
+	while(!bar_sensor(rightTopHat,leftTopHat))
 	{
-		if(see_bar(topHat1))
+		if(see_bar(leftTopHat))
 			drive_direct_at(-1, 3);
-		else if(see_bar(topHat2))
+		else if(see_bar(rightTopHat))
 			drive_direct_at(3, -1);
 	} 
 }
