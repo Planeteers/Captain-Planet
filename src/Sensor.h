@@ -21,7 +21,7 @@ float analog_to_inches(int);
 float analog_to_inches_avg(int, int);
 float radian_to_degree(float);
 float degree_to_radian(float);
-float angle_off_set(int, int);
+float angle_offset(int, int);
 int see_bar(int);
 int bar_sensor(int, int);
 
@@ -51,7 +51,7 @@ float degree_to_radian(float degree)
 	return(degree*(pie/180));
 }
 
-float angle_off_set(int port1, int port2)
+float angle_offset(int port1, int port2)
 {
 	float radians = atan2(analog_to_inches_avg(port1, 10)-analog_to_inches_avg(port2, 10),thetaTwo);
     return(radian_to_degree(radians));
