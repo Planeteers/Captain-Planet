@@ -24,20 +24,20 @@ void docking_phase();
 int scan_code();
 void realign(int);
 void send_charge_signal(int);
-void bar_straight();
+void bar_straight(int);
 int charge(int);
-void dock(int);
-void undock(int);
+void undock();
 
 
 //Complex Movement leaves us right in front of the cubbie. This will take us to the first barcode.
 void docking_phase()
 {
 	move_forward_at(6);
-    bar_straight();
+    bar_straight(1);
 	stop();
 	int code = scan_code();
-	printf("Barcode Number: %d", code);
+	printf("%d", code);
+	undock();
 }
 
 //Goes four inches reading each barcode and then returns the barcode
@@ -111,15 +111,17 @@ void send_charge_signal(int corner)
     }
 }
 
-void bar_straight()
+void bar_straight(int direction)
 {
 	while(!bar_sensor(rightTopHat,leftTopHat))
 	{
 		if(see_bar(leftTopHat))
-			drive_direct_at(-1, 3);
+			drive_direct_at(direction*-1, direction*3);
 		else if(see_bar(rightTopHat))
-			drive_direct_at(3, -1);
+			drive_direct_at(direction*3, direction*-1);
 	} 
+	stop();
+	sleep(.1);
 }
 
 int charge(int corner)
@@ -130,25 +132,15 @@ int charge(int corner)
     //send_Charge_Signal(none);
 }
 
-void dock(int corner)
+void undock()
 {
-    if(corner != wind)
-        move_forward(11,10);
-    else
-        move_forward(11,-10);
-    charge(corner);
-        
-}
-
-void undock(int corner)
-{
-    if(corner != wind)
-    {
-        move_forward(14, -10);
-        turn_left(180, 10);
-    }   
-    else
-        move_forward(14, 10);
+    move_forward_at(-6);
+    bar_straight(-1);
+	move_backward(6,14);
+	block_digo_done();
+	turn_left(185.0, 10);
+	block_digo_done();
+	//straighten_off_wall(int right,int speed)
 }
 
 #endif

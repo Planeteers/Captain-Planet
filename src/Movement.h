@@ -11,7 +11,7 @@
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
  
-#define WHEEL_DIAMETER 2.25 //inches
+#define WHEEL_DIAMETER 2.31 //inches
 #define TICKS_PER_REV_RIGHT 463.0//450.0 //ish
 #define TICKS_PER_REV_LEFT  463.0
 #define SECONDS_PER_LOOP 0.021
@@ -19,7 +19,7 @@
 #define WHEEL_CIRC (WHEEL_DIAMETER*PIE)
 #define TICKS_PER_DISTANCE
  
-#define WHEEL_BASE 8.50 //inches
+#define WHEEL_BASE 9.0 //inches
  
 int block_digo_done();
 int is_digo_done();
@@ -34,7 +34,31 @@ int turn_right(float degrees, int speed);
 int turn_left_at(int speed);
 int turn_right_at(int speed);
 int print_encoders();
-int distance_traveled();
+float distance_traveled();
+int straighten_off_wall(int right,int speed);
+int stop();
+
+int move_forward_off_wall(float dist, int speed)
+{
+	float dist_from_wall = right_avg_distance(10);
+	float dist_traveled = 0;
+	move_forward(dist, speed);
+	while(!is_digo_done())
+	{
+		if(right_avg_distance(10) < dist_from_wall)
+		{
+			stop();
+			dist_traveled += distance_traveled();
+			turn_left(1.0,speed);
+			move_forward(dist-dist_traveled,speed);
+		}
+		else 
+		{
+			beep();
+			sleep(.5);
+		}
+	}
+}
  
 int straighten_off_wall(int right,int speed)
 {
@@ -49,7 +73,7 @@ int straighten_off_wall(int right,int speed)
 	return 1;
 }
  
-int distance_traveled()
+float distance_traveled()
 {
 	sprintf(obuf,"getenc 1\r");
 	int renc, lenc;
@@ -66,6 +90,7 @@ int distance_traveled()
 	float rdist = renc*WHEEL_CIRC/TICKS_PER_REV_RIGHT;
 	float ldist = lenc*WHEEL_CIRC/TICKS_PER_REV_LEFT;
 	printf("renc: %f\nlenc: %f\n",rdist,ldist);
+	return (rdist+ldist)/2;
 }
  
 int print_encoders()
@@ -122,19 +147,19 @@ int move_backward(float distance, int speed)
 /**
  * drives each motor directly distance in inches at speed rating speed (1-15).
  **/
-int drive_direct(int rspeed, float rdistance, int lspeed, float ldistance)
+int drive_direct(int lspeed, float ldistance, int rspeed, float rdistance)
 {
     float rticks = (rdistance*(TICKS_PER_REV_RIGHT/WHEEL_CIRC));
     float lticks = (ldistance*(TICKS_PER_REV_LEFT/WHEEL_CIRC));
     sprintf(obuf,"digo 2:%d:%d 1:%d:%d \r",(int)rticks,rspeed,(int)lticks,lspeed);
-    //printf("(r,l): (%f,%f)\n",rticks,lticks);
+    printf("(r,l): (%f,%f)\n",rticks,lticks);
     return send_command();
 }
 
 /**
  * Direct drive using only velocity control. (1-15)
  **/
-int drive_direct_at(int rspeed, int lspeed)
+int drive_direct_at(int lspeed, int rspeed)
 {
     sprintf(obuf,"mogo 1:%d 2:%d \r",rspeed,lspeed);
     return send_command();
@@ -187,7 +212,8 @@ int turn_left(float degrees, int speed)
  **/
 int turn_right(float degrees, int speed)
 {
-    return turn_left(-degrees, speed);
+	int offset = degrees*(1.1/90.0);
+    return turn_left(-degrees+offset, speed);
 }
 
 /**

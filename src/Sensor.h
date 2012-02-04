@@ -14,6 +14,11 @@
 #define topHat1 14
 #define topHat2 15
 
+#define leftFront 1
+#define leftBack 3
+#define rightFront 2
+#define rightBack 4
+
 #ifndef SENSOR_H
 #define SENSOR_H
 
@@ -39,6 +44,16 @@ float analog_to_inches_avg(int port,int iterations)
 		avg+=analog_to_inches(port);
 	}
 	return (avg/((float)iterations));
+}
+
+float left_avg_distance(int iterations)
+{
+	return (analog_to_inches_avg(leftFront,iterations) + analog_to_inches_avg(leftBack,iterations))/2.0;
+}
+
+float right_avg_distance(int iterations)
+{
+	return (analog_to_inches_avg(rightFront,iterations) + analog_to_inches_avg(rightBack,iterations))/2.0;
 }
 
 float radian_to_degree(float radians)

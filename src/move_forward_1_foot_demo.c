@@ -9,7 +9,7 @@
 
 int main()
 {
-    int speed = 10;
+    int speed = 3;
     
     serializer_connect();
     move_forward(12.0,speed);

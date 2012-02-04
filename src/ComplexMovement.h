@@ -19,8 +19,7 @@ void diagnol();
 
 void top()
 {
-    move_forward(4.5*12.0, speed);
-	block_digo_done();
+    move_forward_off_wall(4.5*12.0, speed);
     turn_right(90, speed);
 	block_digo_done();
     move_backward(1.2*12.0, speed);
@@ -29,7 +28,7 @@ void top()
 	block_digo_done();
     move_forward(1.8*12.0,speed);
 	block_digo_done();
-	move_backward(2.5,speed);
+	move_backward(2.2,speed);
 	block_digo_done();
 	turn_right(90.0,speed);
 	block_digo_done();

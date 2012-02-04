@@ -25,8 +25,7 @@ int main()
     sleep(1.0);
     print_encoders();
     turn_left(90.,speed);
-    block_digo_done();
-    sleep(1.0); 
+    block_digo_done(); 
     print_encoders();
 	sleep(1.0);
     serializer_disconnect();

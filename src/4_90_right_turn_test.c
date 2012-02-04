@@ -12,21 +12,20 @@ int main()
     int speed = 10;
     
     serializer_connect();
-    turn_left(90.,speed);
+    turn_right(90.,speed);
     block_digo_done();
     sleep(1.0);
     print_encoders();
-    turn_left(90.,speed);
+    turn_right(90.,speed);
     block_digo_done();
     sleep(1.0);
     print_encoders();
-    turn_left(90.,speed);
+    turn_right(90.,speed);
     block_digo_done();
     sleep(1.0);
     print_encoders();
-    turn_left(90.,speed);
-    block_digo_done();
-    sleep(1.0); 
+    turn_right(90.,speed);
+    block_digo_done(); 
     print_encoders();
 	sleep(1.0);
     serializer_disconnect();
