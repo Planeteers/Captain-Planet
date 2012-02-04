@@ -19,10 +19,12 @@ void diagnol();
 
 void top()
 {
+	float dist = -4;
     move_forward_off_wall(4.5*12.0, speed);
+	dist += analog_to_inches_avg(rightFront,10);
     turn_right(90, speed);
 	block_digo_done();
-    move_backward(1.2*12.0, speed);
+    move_backward((1.2*12.0)-dist, speed);
 	block_digo_done();
     turn_left(90, speed);
 	block_digo_done();
@@ -39,31 +41,30 @@ void bottom()
 {
     turn_left(-90, speed);
 	block_digo_done();
-    move_backward(5*12, speed);
+    move_backward((5*12)+8, speed);
 	block_digo_done();
     turn_left(-90, speed);
 	block_digo_done();
     move_forward(2.2*12, speed);
 	block_digo_done();
-	move_backward(2.5,speed);
+	move_backward(2.2,speed);
 	block_digo_done();
     turn_left(-90, speed);
 	block_digo_done();
-	docking_phase();
-	
+	docking_phase();	
 }
 
 void diagonal()
 {
-    turn_left(30, speed);
+    turn_left(25, speed);
 	block_digo_done();
-	move_forward(4.9*12, speed);
+	move_forward(5.0*12, speed);
 	block_digo_done();
-	turn_left(60, speed);
+	turn_left(65, speed);
 	block_digo_done();
-	move_forward(5.05*12, speed);
+	move_forward(5.50*12, speed);
 	block_digo_done();
-	move_backward(2.5,speed);
+	move_backward(2.2,speed);
 	block_digo_done();
 	turn_left(-90, speed);
 	block_digo_done();

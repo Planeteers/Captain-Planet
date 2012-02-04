@@ -40,22 +40,26 @@ int stop();
 
 int move_forward_off_wall(float dist, int speed)
 {
-	float dist_from_wall = right_avg_distance(10);
+	float dist_from_wall = analog_to_inches_avg(rightFront,10);
 	float dist_traveled = 0;
+	float cur_dist;
 	move_forward(dist, speed);
 	while(!is_digo_done())
 	{
-		if(right_avg_distance(10) < dist_from_wall)
+		cur_dist = analog_to_inches_avg(rightFront,10);
+		printf("\ncur_dist: %f\nrecorded_dist: %f\n",cur_dist,dist_from_wall);
+		if(cur_dist < dist_from_wall-.1)
 		{
 			stop();
 			dist_traveled += distance_traveled();
+			//cbc_display_clear();
+			//while(!black_button());
 			turn_left(1.0,speed);
 			move_forward(dist-dist_traveled,speed);
 		}
-		else 
+		else
 		{
 			beep();
-			sleep(.5);
 		}
 	}
 }
