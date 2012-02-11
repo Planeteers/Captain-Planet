@@ -24,6 +24,7 @@
 int block_digo_done();
 int is_digo_done();
 int move_forward(float distance, int speed);
+int move_forward_speed(float distance, int rspeed, int lspeed);
 int move_backward(float distance, int speed);
 int move_forward_at(int speed);
 int move_backward_at(int speed);
@@ -40,27 +41,37 @@ int stop();
 
 int move_forward_off_wall(float dist, int speed)
 {
-	float dist_from_wall = analog_to_inches_avg(rightFront,10);
+	float dist_from_wall = analog_to_inches_avg(rightFrontIR,10);
 	float dist_traveled = 0;
 	float cur_dist;
 	move_forward(dist, speed);
 	while(!is_digo_done())
 	{
-		cur_dist = analog_to_inches_avg(rightFront,10);
+		cur_dist = analog_to_inches_avg(rightFrontIR,10);
 		printf("\ncur_dist: %f\nrecorded_dist: %f\n",cur_dist,dist_from_wall);
 		if(cur_dist < dist_from_wall-.1)
 		{
+			//stop();
+			printf("to close! vearing left\n");
+			//dist_traveled += distance_traveled();
+			drive_direct_at(speed-1,speed);
+			sleep(1.0);
 			stop();
 			dist_traveled += distance_traveled();
-			//cbc_display_clear();
-			//while(!black_button());
-			turn_left(1.0,speed);
-			move_forward(dist-dist_traveled,speed);
+			move_forward_speed(dist-dist_traveled,speed,speed);
 		}
-		else
+		else if(cur_dist > dist_from_wall+1.0)
 		{
-			beep();
+			//stop();
+			printf("to far! vearing right\n");
+			//dist_traveled += distance_traveled();
+			drive_direct_at(speed,speed-1);
+			sleep(1.0);
+			stop();
+			dist_traveled += distance_traveled();
+			move_forward_speed(dist-dist_traveled,speed,speed);
 		}
+		if(dist_traveled > dist) return 0;
 	}
 }
  
@@ -93,7 +104,7 @@ float distance_traveled()
 	}
 	float rdist = renc*WHEEL_CIRC/TICKS_PER_REV_RIGHT;
 	float ldist = lenc*WHEEL_CIRC/TICKS_PER_REV_LEFT;
-	printf("renc: %f\nlenc: %f\n",rdist,ldist);
+	//printf("renc: %f\nlenc: %f\n",rdist,ldist);
 	return (rdist+ldist)/2;
 }
  
@@ -115,10 +126,14 @@ int print_encoders()
  
 int block_digo_done()
 {
+	sleep(.1);
 	while(!is_digo_done());
 	return 1;
 }
  
+/**
+ * 
+ **/
 int is_digo_done()
 {
     sprintf(obuf,"pids \r");
@@ -141,6 +156,14 @@ int move_forward(float distance, int speed)
 }
 
 /**
+ *
+ **/
+int move_forward_speed(float distance, int lspeed, int rspeed)
+{
+	return drive_direct(lspeed,distance,rspeed,distance);
+}
+
+/**
  * Moves backward Distance at speed rating. distance is in inches and speed is 1-15
  **/
 int move_backward(float distance, int speed)
@@ -156,7 +179,7 @@ int drive_direct(int lspeed, float ldistance, int rspeed, float rdistance)
     float rticks = (rdistance*(TICKS_PER_REV_RIGHT/WHEEL_CIRC));
     float lticks = (ldistance*(TICKS_PER_REV_LEFT/WHEEL_CIRC));
     sprintf(obuf,"digo 2:%d:%d 1:%d:%d \r",(int)rticks,rspeed,(int)lticks,lspeed);
-    printf("(r,l): (%f,%f)\n",rticks,lticks);
+    //printf("(r,l): (%f,%f)\n",rticks,lticks);
     return send_command();
 }
 

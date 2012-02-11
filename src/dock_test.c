@@ -12,7 +12,7 @@ int main()
 	set_each_analog_state(1,1,1,1,1,1,0,0);
 	serializer_connect();
 	while(!black_button())
-		diagonal();
+		top();
 	//docking_phase();
 	serializer_disconnect();
 }
