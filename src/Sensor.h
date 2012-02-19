@@ -33,7 +33,9 @@ int bar_sensor(int, int);
 
 float analog_to_inches(int port)
 {
-    return (5027.9*pow(analog10(port),-1.086));
+	float ret = (5027.9*pow(analog10(port),-1.086));
+	if(ret < 6.0) return 6.0;
+	return ret;
 }
 
 float analog_to_inches_avg(int port,int iterations)

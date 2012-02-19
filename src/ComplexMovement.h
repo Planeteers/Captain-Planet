@@ -20,13 +20,14 @@ void diagnol();
 void top()
 {
 	float dist = -4;
-    move_forward_off_wall(4.5*12.0, speed);
+    move_forward_off_wall(4.2*12.0, speed);
 	//dist += analog_to_inches_avg(rightFrontIR,10);
     turn_right(90, speed);
 	block_digo_done();
     move_backward((1.2*12.0), speed);
 	block_digo_done();
     turn_left(90, speed);
+	printf("turning left!\n");
 	block_digo_done();
     move_forward(1.8*12.0,speed);
 	block_digo_done();
@@ -56,14 +57,24 @@ void bottom()
 
 void diagonal()
 {
-    turn_left(25, speed);
+	move_forward_off_wall(4.2*12.0, speed);
+	turn_right(90,speed);
+	block_digo_done();
+	move_backward(1.2*12.0,speed);
+	block_digo_done();
+	turn_right(180.,speed);
+	block_digo_done();
+	move_forward_off_wall(4.2*12.0, speed);
+	move_forward(2.0*12.0,speed);
+	block_digo_done();
+    /*turn_left(25, speed);
 	block_digo_done();
 	move_forward(5.0*12, speed);
 	block_digo_done();
 	turn_left(65, speed);
 	block_digo_done();
 	move_forward(5.50*12, speed);
-	block_digo_done();
+	block_digo_done();*/
 	move_backward(2.2,speed);
 	block_digo_done();
 	turn_left(-90, speed);

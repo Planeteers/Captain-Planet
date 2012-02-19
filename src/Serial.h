@@ -91,7 +91,7 @@ void serializer_connect() {
     tcflush(fd, TCIOFLUSH);
     tcsetattr(fd,TCSANOW,&newtio);  
     SERIALIZER = fd ;
-    
+	
     return ;
 }
 
@@ -109,7 +109,11 @@ int send_command()
     sleep(BUF_SIZE * CHAR_DLY) ; // wait for response from Serializer
     bytes_read = read(SERIALIZER, ibuf, BUF_SIZE);  // get the response
     if ( (bytes_read != 0) && (strstr(ibuf, NACKstr) == NULL) ) return ACK ;
-    else return NACK ;
+    else {
+		printf("FAILURE\n");
+		//illegal_command();
+		return NACK ;
+	}
 }
 
 
@@ -167,6 +171,13 @@ int  illegal_command()
 void serializer_disconnect()
 {
     close(SERIALIZER);
+}
+
+int clear_encoders()
+{
+	sprintf(obuf, "clrenc 1 2\r");
+	if(send_command()) return ACK;
+	else return NACK;
 }
 #endif
 #endif

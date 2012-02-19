@@ -50,7 +50,7 @@ int scan_code()
 
 	
 	move_forward(4, 4);
-	while(!is_digo_done())
+	while(is_digo_done() != 2)
 	{
 		curRight = see_bar(leftTophat);
 		curLeft = see_bar(rightTophat);
@@ -136,7 +136,7 @@ void undock()
     bar_straight(-1);
 	move_backward(6,14);
 	block_digo_done();
-	turn_left(185.0, 10);
+	turn_left(180.0, 10);
 	block_digo_done();
 	//straighten_off_wall(int right,int speed)
 }

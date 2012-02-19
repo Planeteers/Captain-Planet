@@ -18,9 +18,8 @@ int main()
 		//printf("    see_bar(%d): %d\n",14,see_bar(14));
 		//printf("    see_bar(%d): %d\n",15,see_bar(15));
 		//printf("bar sensor (%d): %d\n",port_1, bar_sensor(14, 15));
-		printf("analog to inches (%d): %f\n",port_1,analog_to_inches_avg(port_1,10));
-		printf("analog to inches (%d): %f\n",port_2, analog_to_inches_avg(port_2,10));
-		printf("          angleOffSet: %f\n\n",angle_offset(port_1,port_2));
+		printf("analog to inches (%d): %f\n",port_1,analog(port_1));
+		//printf("analog to inches (%d): %f\n",port_2, analog_to_inches_avg(port_2,10));
 		sleep(.3);
 		
 	}
