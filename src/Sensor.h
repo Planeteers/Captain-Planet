@@ -14,6 +14,8 @@
 
 #define leftTophat 14
 #define rightTophat 15
+#define rightWallTophat 7
+#define leftWallTophat 6
 
 #define leftFrontIR 1
 #define leftBackIR 3
@@ -31,6 +33,16 @@ float angle_offset(int, int);
 int see_bar(int);
 int bar_sensor(int, int);
 
+int analog_10_avg(int port)
+{
+	int i,j=0;
+	for(i=0;i<10;i++)
+	{
+		j+=analog10(port);
+	}
+	return j/10;
+}
+
 float analog_to_inches(int port)
 {
 	float x = analog10(port);
@@ -43,7 +55,7 @@ float analog_to_inches(int port)
 	{
 		ret =  (5027.9*pow(analog10(port),-1.086));
 	}
-	if(ret < 6.) return 6.;
+	if(ret < 5.5) return 5.5;
 	return ret;
 }
 

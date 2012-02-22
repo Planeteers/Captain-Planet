@@ -7,10 +7,12 @@
  
  #include "Sensor.h"
  
+ 
+ 
 int main()
 {
-	int port_1 = 2;
-	int port_2 = 4;
+	int port_1 = 6;
+	int port_2 = 2;
 	set_each_analog_state(1,1,1,1,1,1,0,0);
 	while(!black_button())
 	{
@@ -21,6 +23,5 @@ int main()
 		//printf("analog to inches (%d): %f\n",port_1,analog(port_1));
 		printf("analog to inches (%d): %f\n",port_2, analog_to_inches_avg(port_2,10));
 		sleep(.3);
-		
 	}
 }

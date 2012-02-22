@@ -50,14 +50,14 @@ int move_forward_off_wall(float dist, int speed)
 	{
 		cur_dist = analog_to_inches_avg(rightFrontIR,10);
 		printf("\ncur_dist: %f\nrecorded_dist: %f\n",cur_dist,dist_from_wall);
-		if(cur_dist < dist_from_wall-.1)
+		if(cur_dist <= dist_from_wall)
 		{
 			printf("vearing left\n");
 			drive_direct_at(speed-1,speed);
 			sleep(.1);
 			move_forward_at(speed);
 		}
-		else if(cur_dist > dist_from_wall+.1)
+		else if(cur_dist > dist_from_wall+.5)
 		{
 			printf("vearing right\n");
 			drive_direct_at(speed,speed-1);
