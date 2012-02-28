@@ -10,16 +10,15 @@
  
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
- 
-#define WHEEL_DIAMETER 2.31 //inches
-#define TICKS_PER_REV_RIGHT 463.0//450.0 //ish
+
+#define WHEEL_DIAMETER 2.31 //Diameter of the wheels
+#define TICKS_PER_REV_RIGHT 463.0	//number of ticks for a full revolution
 #define TICKS_PER_REV_LEFT  463.0
-#define SECONDS_PER_LOOP 0.021
 #define PIE 3.14159
-#define WHEEL_CIRC (WHEEL_DIAMETER*PIE)
-#define TICKS_PER_DISTANCE
+#define WHEEL_CIRC (WHEEL_DIAMETER*PIE)	//calculation for the circumference of 
+										//the wheels
  
-#define WHEEL_BASE 9.0 //inches
+#define WHEEL_BASE 9.0 //distance between center of wheels
  
 int block_digo_done();
 int is_digo_done();
@@ -38,7 +37,14 @@ int print_encoders();
 float distance_traveled();
 int straighten_off_wall(int right,int speed);
 int stop();
+int move_forward_off_wall(float dist, int speed);
 
+
+/**
+ *	moves forward while continuously polling the side pointing IR sensor. if 
+ *	the distance becomes significantly different from the first recorded value,
+ *	vear either direction to straighten with the wall.
+ **/
 int move_forward_off_wall(float dist, int speed)
 {
 	float dist_from_wall = analog_to_inches_avg(rightFrontIR,10);
@@ -68,7 +74,12 @@ int move_forward_off_wall(float dist, int speed)
 	}
 	stop();
 }
- 
+
+/**
+ *	estimate how many degrees from parallel we are using the side pointing IR 
+ *	sensors and turn right that angle. if the angle is negative we will turn 
+ *	left
+ **/
 int straighten_off_wall(int right,int speed)
 {
 	float angle;
@@ -81,7 +92,14 @@ int straighten_off_wall(int right,int speed)
 	}
 	return 1;
 }
- 
+
+/**
+ *	query's the serializer for the encoder values and converts the returned 
+ *	value into an inch distance based off of wheel circ. assumes straight 
+ *	forward movement, i.e. turning will break this.
+ *
+ *	returns the distance traveled in inches as a float.
+ **/
 float distance_traveled()
 {
 	sprintf(obuf,"getenc 1\r");
@@ -101,7 +119,10 @@ float distance_traveled()
 	//printf("renc: %f\nlenc: %f\n",rdist,ldist);
 	return (rdist+ldist)/2;
 }
- 
+
+/**
+ *	print the current values of the encoders to the screen.
+ **/
 int print_encoders()
 {
 	sprintf(obuf,"getenc 1 2\r");
@@ -118,6 +139,9 @@ int print_encoders()
 	return NACK;
 }
  
+/**
+ *	block all robot logic until the digo command is done.
+ **/
 int block_digo_done()
 {
 	//sleep(.1);
@@ -131,7 +155,7 @@ int block_digo_done()
 }
  
 /**
- * 
+ *	ask if the digo command is done.
  **/
 int is_digo_done()
 {
@@ -147,7 +171,8 @@ int is_digo_done()
 }
  
 /**
- * Moves forward Distance at speed rating. distance is in inches and speed is 1-15
+ *	Moves forward Distance at speed rating. distance is in inches and speed 
+ *	is 1-15.
  **/
 int move_forward(float distance, int speed)
 { 
@@ -155,7 +180,8 @@ int move_forward(float distance, int speed)
 }
 
 /**
- *
+ *	Move forward a certain distance at specified speed. used to make the robot
+ *	"vear" to the left and right, while still moving forward.
  **/
 int move_forward_speed(float distance, int lspeed, int rspeed)
 {
@@ -163,7 +189,8 @@ int move_forward_speed(float distance, int lspeed, int rspeed)
 }
 
 /**
- * Moves backward Distance at speed rating. distance is in inches and speed is 1-15
+ *	Moves backward Distance at speed rating. distance is in inches and speed is 
+ *	1-15.
  **/
 int move_backward(float distance, int speed)
 {
@@ -171,7 +198,8 @@ int move_backward(float distance, int speed)
 }
 
 /**
- * drives each motor directly distance in inches at speed rating speed (1-15).
+ *	drives each motor directly distance in inches at speed rating speed (1-15).
+ *	distance is in inches, speed is a value between 1-15
  **/
 int drive_direct(int lspeed, float ldistance, int rspeed, float rdistance)
 {
@@ -183,7 +211,7 @@ int drive_direct(int lspeed, float ldistance, int rspeed, float rdistance)
 }
 
 /**
- * Direct drive using only velocity control. (1-15)
+ *	Direct drive using only velocity control. (1-15)
  **/
 int drive_direct_at(int lspeed, int rspeed)
 {
@@ -192,7 +220,7 @@ int drive_direct_at(int lspeed, int rspeed)
 }
 
 /**
- * Drive forward at speed
+ *	simplified version of drive_direct_at. only drives forward.
  **/
 int move_forward_at(int speed)
 {
@@ -200,7 +228,7 @@ int move_forward_at(int speed)
 }
 
 /**
- * Drive backward at speed
+ *	simplified version of drive_direct_at. only drives backward.
  **/
 int move_backward_at(int speed)
 {
@@ -208,7 +236,7 @@ int move_backward_at(int speed)
 }
 
 /**
- * turns left at speed
+ *	turns left at speed, speed is a value between 1-15
  **/
 int turn_left_at(int speed)
 {
@@ -216,7 +244,7 @@ int turn_left_at(int speed)
 }
 
 /**
- * turns right at speed
+ *	turns right at speed, speed is a value between 1-15
  **/
 int turn_right_at(int speed)
 {
@@ -224,7 +252,7 @@ int turn_right_at(int speed)
 }
 
 /**
- * turns left specifed number of degrees at speed (1-15)
+ *	turns left specifed number of degrees at speed (1-15)
  **/
 int turn_left(float degrees, int speed)
 {
@@ -234,7 +262,7 @@ int turn_left(float degrees, int speed)
 }
 
 /**
- * turns right specified number of degrees at speed (1-15)
+ *	turns right specified number of degrees at speed (1-15)
  **/
 int turn_right(float degrees, int speed)
 {
@@ -243,7 +271,7 @@ int turn_right(float degrees, int speed)
 }
 
 /**
- * 
+ *	sends the stop command to the serializer.
  **/
 int stop()
 {
