@@ -8,7 +8,8 @@
 #include "Movement.h"
 #include "Sensor.h"
 #include "Dock.h"
-#define speed 14
+#define SPEED 14
+#define WALL_SPEED 8
 
 #ifndef COMPLEX_MOVEMENT_H
 #define COMPLEX_MOVEMENT_H
@@ -19,67 +20,89 @@ void diagnol();
 
 void top()
 {
-	float dist = -4;
-    move_forward_off_wall(4.2*12.0, speed);
+	turn_left(180.,SPEED);
+	block_digo_done();
+    move_forward_off_wall(4.2*12.0, SPEED);
 	//dist += analog_to_inches_avg(rightFrontIR,10);
-    turn_right(90, speed);
+    turn_right(90, SPEED);
 	block_digo_done();
-    move_backward((1.2*12.0), speed);
+    move_backward((1.2*12.0), SPEED);
 	block_digo_done();
-    turn_left(90, speed);
-	printf("turning left!\n");
+    turn_left(90, SPEED);
+	//printf("turning left!\n");
 	block_digo_done();
-    move_forward(1.8*12.0,speed);
+    move_forward(1.8*12.0,WALL_SPEED);
 	block_digo_done();
-	move_backward(2.2,speed);
+	move_backward(2.2,SPEED);
 	block_digo_done();
-	turn_right(90.0,speed);
+	turn_right(90.0,SPEED);
 	block_digo_done();
     docking_phase();
 }
 
 void bottom()
 {
-    turn_left(-90, speed);
+    turn_left(90, SPEED);
 	block_digo_done();
-    move_backward((5*12)+8, speed);
+	move_forward(5.0, WALL_SPEED);
 	block_digo_done();
-    turn_left(-90, speed);
+    move_backward(1.2*12.0, SPEED);
 	block_digo_done();
-    move_forward(2.2*12, speed);
+    turn_right(90, SPEED);
 	block_digo_done();
-	move_backward(2.2,speed);
+    move_forward(1.7*12, WALL_SPEED);
 	block_digo_done();
-    turn_left(-90, speed);
+	move_backward(3.0,SPEED);
+	block_digo_done();
+    turn_left(90, SPEED);
+	block_digo_done();
+	move_backward_off_wall(4.*12.0,SPEED);
+	turn_right(90.,SPEED);
+	block_digo_done();
+	move_forward(5.0,WALL_SPEED);
+	block_digo_done();
+	move_backward(2.2,SPEED);
+	block_digo_done();
+	turn_right(90.,SPEED);
 	block_digo_done();
 	docking_phase();	
 }
 
 void diagonal()
 {
-	move_forward_off_wall(4.2*12.0, speed);
-	turn_right(90,speed);
+	turn_left(180.,SPEED);
 	block_digo_done();
-	move_backward(1.2*12.0,speed);
+    move_forward_off_wall(4.2*12.0, SPEED);
+	//dist += analog_to_inches_avg(rightFrontIR,10);
+    turn_right(90, SPEED);
 	block_digo_done();
-	turn_right(180.,speed);
+    move_backward((1.2*12.0), SPEED);
 	block_digo_done();
-	move_forward_off_wall(4.2*12.0, speed);
-	move_forward(2.0*12.0,speed);
+    turn_left(90, SPEED);
+	//printf("turning left!\n");
 	block_digo_done();
-    /*turn_left(25, speed);
+    move_forward(1.8*12.0,WALL_SPEED);
 	block_digo_done();
-	move_forward(5.0*12, speed);
+	move_backward(2.2,SPEED);
 	block_digo_done();
-	turn_left(65, speed);
+	turn_left(90.0,SPEED);
 	block_digo_done();
-	move_forward(5.50*12, speed);
-	block_digo_done();*/
-	move_backward(2.2,speed);
+	move_forward_off_wall(4.2*12.0, SPEED);
+	//dist += analog_to_inches_avg(rightFrontIR,10);
+    turn_right(90, SPEED);
 	block_digo_done();
-	turn_left(-90, speed);
+    move_backward((1.2*12.0), SPEED);
 	block_digo_done();
-	docking_phase();
+    turn_left(90, SPEED);
+	//printf("turning left!\n");
+	block_digo_done();
+    move_forward(1.8*12.0,WALL_SPEED);
+	block_digo_done();
+	move_backward(2.2,SPEED);
+	block_digo_done();
+	turn_right(90.0,SPEED);
+	block_digo_done();
+    docking_phase();
 }
 
 #endif

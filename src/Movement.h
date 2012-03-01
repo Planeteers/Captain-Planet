@@ -38,7 +38,44 @@ float distance_traveled();
 int straighten_off_wall(int right,int speed);
 int stop();
 int move_forward_off_wall(float dist, int speed);
+int move_backward_off_wall(float dist, int speed);
 
+/**
+ *	moves forward while continuously polling the side pointing IR sensor. if 
+ *	the distance becomes significantly different from the first recorded value,
+ *	vear either direction to straighten with the wall.
+ **/
+int move_backward_off_wall(float dist, int speed)
+{
+	float dist_from_wall = analog_to_inches_avg(rightFrontIR,10);
+	float dist_traveled = 0;
+	float cur_dist;
+	clear_encoders();
+	move_forward_at(-speed);
+	while(dist_traveled <= dist)
+	{
+		cur_dist = analog_to_inches_avg(rightFrontIR,10);
+		printf("\ndist: %f\ncurrent_dist: %f\n",dist,dist_traveled);
+		if(cur_dist <= dist_from_wall)
+		{
+			printf("too close to wall\n");
+			drive_direct_at(-speed+1,-speed);
+			sleep(.05);
+			move_forward_at(-speed);
+			sleep(.05);
+		}
+		else if(cur_dist > dist_from_wall+.1)
+		{
+			printf("too far from wall\n");
+			drive_direct_at(-speed,-speed+1);
+			sleep(.05);
+			move_forward_at(-speed);
+			sleep(.05);
+		}
+		dist_traveled = -distance_traveled();
+	}
+	stop();
+}
 
 /**
  *	moves forward while continuously polling the side pointing IR sensor. if 
@@ -58,17 +95,19 @@ int move_forward_off_wall(float dist, int speed)
 		printf("\ncur_dist: %f\nrecorded_dist: %f\n",cur_dist,dist_from_wall);
 		if(cur_dist <= dist_from_wall)
 		{
-			printf("vearing left\n");
+			printf("too close to wall\n");
 			drive_direct_at(speed-1,speed);
-			sleep(.1);
+			sleep(.05);
 			move_forward_at(speed);
+			sleep(.05);
 		}
-		else if(cur_dist > dist_from_wall+.5)
+		else if(cur_dist > dist_from_wall+.1)
 		{
-			printf("vearing right\n");
+			printf("too far from wall\n");
 			drive_direct_at(speed,speed-1);
-			sleep(.1);
+			sleep(.05);
 			move_forward_at(speed);
+			sleep(.05);
 		}
 		dist_traveled = distance_traveled();
 	}
@@ -167,6 +206,12 @@ int is_digo_done()
            return 2;
         else return 1;
     }
+	else
+	{
+		sleep(.1);
+		illegal_command();
+		printf("%s\n",ibuf);
+	}
     return NACK;
 }
  

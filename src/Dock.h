@@ -7,13 +7,14 @@
 #include "Sensor.h"
 #include "Movement.h"
 
-#define left 8
-#define right 9
-#define solar 1
-#define hydro 2
-#define wind 3
-#define none 4
-#define discharge 5 
+#define LEFT 8
+#define RIGHT 9
+#define SOLAR 0
+#define HYDRO 1
+#define WIND 2
+#define FLAG 3
+#define NONE 4
+#define DISCHARGE 5 
 
 #ifndef DOCK_H
 #define DOCK_H
@@ -69,7 +70,7 @@ int scan_code()
 
 void realign(int corner)
 {
-    if(corner != wind)
+    if(corner != WIND)
     {
         turn_left(5, 10);
         move_forward(6, -10);
@@ -90,19 +91,19 @@ void send_charge_signal(int corner)
 {
     switch (corner)
     {
-        case none:
+        case NONE:
             set_gpio(0,0);
             set_gpio(1,0);
             break;
-        case solar:
+        case SOLAR:
             set_gpio(0,0);
             set_gpio(1,1);
             break;
-        case hydro:
+        case HYDRO:
             set_gpio(0,1);
             set_gpio(1,0);
             break;
-        case discharge:
+        case DISCHARGE:
             set_gpio(0,1);
             set_gpio(1,1);
             break;
@@ -135,8 +136,6 @@ void undock()
     move_forward_at(-6);
     bar_straight(-1);
 	move_backward(6,14);
-	block_digo_done();
-	turn_left(180.0, 10);
 	block_digo_done();
 	//straighten_off_wall(int right,int speed)
 }

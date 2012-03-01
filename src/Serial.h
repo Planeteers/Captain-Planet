@@ -13,8 +13,6 @@
 
 //size of the i/o buffer used to communicate with the serializer
 #define   BUF_SIZE   64
-#define   LEFT       1 //left motor number
-#define   RIGHT      2 //right motor number
 #define   ACK        1 //Acknowledged signal
 #define   NACK       0 //not acknowledged signal
 #define   TRUE       1 
@@ -109,14 +107,17 @@ void serializer_connect() {
  **/
 int send_command() 
 {
+	int i;
     int   bytes_read ;
+	for(i=BUF_SIZE-1;i>=0;i--)
+		ibuf[i]=0;
     
     write(SERIALIZER, obuf, strnlen(obuf, BUF_SIZE));
     sleep(BUF_SIZE * CHAR_DLY) ; // wait for response from Serializer
     bytes_read = read(SERIALIZER, ibuf, BUF_SIZE);  // get the response
     if ( (bytes_read != 0) && (strstr(ibuf, NACKstr) == NULL) ) return ACK ;
     else {
-		printf("FAILURE\n");
+		printf("FAILURE: %d\n",bytes_read);
 		//illegal_command();
 		return NACK ;
 	}

@@ -1,53 +1,80 @@
 #include "ComplexMovement.h"
 
-#define solar 1
-#define hydro 2
-#define wind  3 
-#define flag  4
+int HYDRO_IS_ON = 0;
+int SOLAR_IS_ON = 0;
+int WIND_IS_ON = 0;
+
+const float COMP_TIME_LENGTH = 300.0;
+float START_TIME;
+float CURRENT_TIME;
+
+//
+const float HYDRO_TIMES[][2] = {
+	{0.0,60.0}
+};
+
+const float SOLAR_TIMES[][2] = {
+	{0.0,60.0},
+	{70.,130.}
+};
+
+const float WIND_TIMES[][2] = {
+	{0.0,60.0}
+};
 
 void planner(int);
-void move_from_solar(int);
-void move_from_hyrdo(int);
-void move_from_wind(int);
-void move_from_flag(int);
+void move_from_solar_to(int);
+void move_from_hyrdo_to(int);
+void move_from_wind_to(int);
+void move_from_flag_to(int);
 
-
-void move_from_solar(int barcode)
+void move_from_solar_to(int barcode)
 {
-	if(barcode == hydro)
+	if(barcode == HYDRO)
 		top();
-	else if(barcode == wind)
+	else if(barcode == WIND)
 		diagonal();
 	else
 		bottom();
 }
 
-void move_from_hydro(int barcode)
+void move_from_hydro_to(int barcode)
 {
-	if(barcode == wind)
+	if(barcode == WIND)
 		top();
-	else if(barcode == flag)
+	else if(barcode == FLAG)
 		diagonal();
 	else
 		bottom();
 }
 
-void move_from_wind(int barcode)
+void move_from_wind_to(int barcode)
 {
-	if(barcode == flag)
+	if(barcode == FLAG)
 		top();
-	else if(barcode == solar)
+	else if(barcode == SOLAR)
 		diagonal();
 	else
 		bottom();
 }
 
-void move_from_flag(int barcode)
+void move_from_flag_to(int barcode)
 {
-	if(barcode == solar)
+	if(barcode == SOLAR)
 		top();
-	else if(barcode == hydro)
+	else if(barcode == HYDRO)
 		diagonal();
 	else
 		bottom();
+}
+
+void start_timer()
+{
+	START_TIME = seconds();
+	CURRENT_TIME = seconds() - START_TIME;
+	while(CURRENT_TIME < COMP_TIME_LENGTH)
+	{
+		sleep(1.0);
+		CURRENT_TIME = seconds()-START_TIME;
+	}
 }

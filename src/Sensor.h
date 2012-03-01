@@ -55,7 +55,7 @@ float analog_to_inches(int port)
 	{
 		ret =  (5027.9*pow(analog10(port),-1.086));
 	}
-	if(ret < 5.5) return 5.5;
+	if(ret < 5.) return 5.;
 	return ret;
 }
 
