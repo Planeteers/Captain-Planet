@@ -14,19 +14,25 @@
 #define WIND 2
 #define FLAG 3
 #define NONE 4
-#define DISCHARGE 5 
 
 #ifndef DOCK_H
 #define DOCK_H
 
+int DOCK_INTERRUPT = 0;
+
 void docking_phase();
-int scan_code();
-void realign(int);
 void send_charge_signal(int);
 void bar_straight(int);
 int charge(int);
 void undock();
 
+void dock(int corner)
+{
+	docking_phase();
+	send_charge_signal(corner);
+	send_charge_signal(NONE);
+	undock();
+}
 
 //Complex Movement leaves us right in front of the cubbie. This will take us to the first barcode.
 void docking_phase()
@@ -34,54 +40,8 @@ void docking_phase()
 	move_forward_at(6);
     bar_straight(1);
 	stop();
-	int code = scan_code();
-	printf("%d", code);
-	undock();
-}
-
-//Goes four inches reading each barcode and then returns the barcode
-int scan_code()
-{
-    int leftCode = 1;
-	int rightCode = 1;
-	int preRight = 0;
-	int preLeft = 0;
-	int curRight = 0;
-	int curLeft = 0;
-
-	
-	move_forward(4, 4);
-	while(is_digo_done() != 2)
-	{
-		curRight = see_bar(leftTophat);
-		curLeft = see_bar(rightTophat);
-		if(curLeft && !preLeft)
-			leftCode++;
-		if(curRight && !preRight)
-			rightCode++;
-
-		preLeft = curLeft;
-		preRight = curRight;
-	}
-	printf("Barcode Left Number: %d", leftCode);
-	printf("Barcode Right Number: %d", rightCode);
-    return leftCode;
-}
-
-void realign(int corner)
-{
-    if(corner != WIND)
-    {
-        turn_left(5, 10);
-        move_forward(6, -10);
-        move_forward(6, 10);
-    }
-    else
-    {
-        turn_left(-5, 10);
-        move_forward(6, 10);
-        move_forward(6, -10);
-    }
+	//printf("%d", code);
+	//undock();
 }
 
 /**
@@ -103,7 +63,7 @@ void send_charge_signal(int corner)
             set_gpio(0,1);
             set_gpio(1,0);
             break;
-        case DISCHARGE:
+        case FLAG:
             set_gpio(0,1);
             set_gpio(1,1);
             break;
@@ -126,6 +86,11 @@ void bar_straight(int direction)
 int charge(int corner)
 {
     send_charge_signal(corner);
+	int signal_from_arduino = 0;
+	while(!DOCK_INTERRUPT && !signal_from_arduino)
+	{
+		signal_from_arduino = get_gpio(5);
+	}
    // while(charging())
     //sleep(1);
     //send_Charge_Signal(none);

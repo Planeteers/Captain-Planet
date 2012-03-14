@@ -14,13 +14,13 @@
 
 #define leftTophat 14
 #define rightTophat 15
-#define rightWallTophat 7
-#define leftWallTophat 6
-
-#define leftFrontIR 1
-#define leftBackIR 3
 #define rightFrontIR 2
-#define rightBackIR 4
+
+//#define rightWallTophat 7
+//#define leftWallTophat 6
+//#define leftFrontIR 1
+//#define leftBackIR 3
+//#define rightBackIR 4
 
 #ifndef SENSOR_H
 #define SENSOR_H
@@ -70,15 +70,15 @@ float analog_to_inches_avg(int port,int iterations)
 	return (avg/((float)iterations));
 }
 
-float left_avg_distance(int iterations)
-{
-	return (analog_to_inches_avg(leftFrontIR,iterations) + analog_to_inches_avg(leftBackIR,iterations))/2.0;
-}
+//float left_avg_distance(int iterations)
+//{
+//	return (analog_to_inches_avg(leftFrontIR,iterations) + analog_to_inches_avg(leftBackIR,iterations))/2.0;
+//}
 
-float right_avg_distance(int iterations)
-{
-	return (analog_to_inches_avg(rightFrontIR,iterations) + analog_to_inches_avg(rightBackIR,iterations))/2.0;
-}
+//float right_avg_distance(int iterations)
+//{
+//	return (analog_to_inches_avg(rightFrontIR,iterations) + analog_to_inches_avg(rightBackIR,iterations))/2.0;
+//}
 
 float radian_to_degree(float radians)
 {

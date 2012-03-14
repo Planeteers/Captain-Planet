@@ -17,6 +17,11 @@
 void top();
 void bottom();
 void diagnol();
+void move_from_solar_to(int);
+void move_from_hydro_to(int);
+void move_from_wind_to(int);
+void move_from_flag_to(int);
+void move_to(int, int);
 
 void top()
 {
@@ -37,7 +42,6 @@ void top()
 	block_digo_done();
 	turn_right(90.0,SPEED);
 	block_digo_done();
-    docking_phase();
 }
 
 void bottom()
@@ -65,7 +69,6 @@ void bottom()
 	block_digo_done();
 	turn_right(90.,SPEED);
 	block_digo_done();
-	docking_phase();	
 }
 
 void diagonal()
@@ -102,7 +105,60 @@ void diagonal()
 	block_digo_done();
 	turn_right(90.0,SPEED);
 	block_digo_done();
-    docking_phase();
+}
+
+void move_to(int orginCorner, int destination)
+{
+	if(orginCorner == HYDRO)
+		move_from_hydro_to(destination);
+	else if(orginCorner == SOLAR)
+		move_from_solar_to(destination);
+	else if(orginCorner == WIND)
+		move_from_wind_to(destination);
+	else if(orginCorner == FLAG)
+		move_from_flag_to(destination);
+	else
+		printf("%d\n", destination);
+}
+
+void move_from_solar_to(int barcode)
+{
+	if(barcode == HYDRO)
+		top();
+	else if(barcode == WIND)
+		diagonal();
+	else
+		bottom();
+}
+
+void move_from_hydro_to(int barcode)
+{
+	if(barcode == WIND)
+		top();
+	else if(barcode == FLAG)
+		diagonal();
+	else
+		bottom();
+}
+
+void move_from_wind_to(int barcode)
+{
+	if(barcode == FLAG)
+		top();
+	else if(barcode == SOLAR)
+		diagonal();
+	else
+		bottom();
+}
+
+void move_from_flag_to(int barcode)
+{
+	if(barcode == SOLAR)
+		top();
+	else if(barcode == HYDRO)
+		diagonal();
+	else
+		bottom();
 }
 
 #endif

@@ -4,9 +4,11 @@ int HYDRO_IS_ON = 0;
 int SOLAR_IS_ON = 0;
 int WIND_IS_ON = 0;
 
-const float COMP_TIME_LENGTH = 300.0;
+const float COMP_TIME_LENGTH = 3.0;
 float START_TIME;
 float CURRENT_TIME;
+
+int TIMER_PROCESS_ID;
 
 //
 const float HYDRO_TIMES[][2] = {
@@ -22,51 +24,8 @@ const float WIND_TIMES[][2] = {
 	{0.0,60.0}
 };
 
-void planner(int);
-void move_from_solar_to(int);
-void move_from_hyrdo_to(int);
-void move_from_wind_to(int);
-void move_from_flag_to(int);
-
-void move_from_solar_to(int barcode)
-{
-	if(barcode == HYDRO)
-		top();
-	else if(barcode == WIND)
-		diagonal();
-	else
-		bottom();
-}
-
-void move_from_hydro_to(int barcode)
-{
-	if(barcode == WIND)
-		top();
-	else if(barcode == FLAG)
-		diagonal();
-	else
-		bottom();
-}
-
-void move_from_wind_to(int barcode)
-{
-	if(barcode == FLAG)
-		top();
-	else if(barcode == SOLAR)
-		diagonal();
-	else
-		bottom();
-}
-
-void move_from_flag_to(int barcode)
-{
-	if(barcode == SOLAR)
-		top();
-	else if(barcode == HYDRO)
-		diagonal();
-	else
-		bottom();
-}
+void start_timer();
+void init_captain_planet_with_our_powers_combined();
 
 void start_timer()
 {
@@ -77,4 +36,12 @@ void start_timer()
 		sleep(1.0);
 		CURRENT_TIME = seconds()-START_TIME;
 	}
+	CURRENT_TIME = -1;
+}
+
+void init_captain_planet_with_our_powers_combined()
+{
+	set_each_analog_state(1,1,1,1,1,1,0,0);
+    serializer_connect();
+	TIMER_PROCESS_ID = start_process(start_timer);
 }
