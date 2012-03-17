@@ -7,18 +7,10 @@
  
 #include "Serial.h"
 #include "Sensor.h"
+#include "CaptainPlanetGlobals.h"
  
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
-
-#define WHEEL_DIAMETER 2.31 //Diameter of the wheels
-#define TICKS_PER_REV_RIGHT 463.0	//number of ticks for a full revolution
-#define TICKS_PER_REV_LEFT  463.0
-#define PIE 3.14159
-#define WHEEL_CIRC (WHEEL_DIAMETER*PIE)	//calculation for the circumference of 
-										//the wheels
- 
-#define WHEEL_BASE 9.0 //distance between center of wheels
  
 int block_digo_done();
 int is_digo_done();
@@ -55,10 +47,10 @@ int move_backward_off_wall(float dist, int speed)
 	while(dist_traveled <= dist)
 	{
 		cur_dist = analog_to_inches_avg(rightFrontIR,10);
-		printf("\ndist: %f\ncurrent_dist: %f\n",dist,dist_traveled);
+		//printf("\ndist: %f\ncurrent_dist: %f\n",dist,dist_traveled);
 		if(cur_dist <= dist_from_wall)
 		{
-			printf("too close to wall\n");
+			//printf("too close to wall\n");
 			drive_direct_at(-speed+1,-speed);
 			sleep(.05);
 			move_forward_at(-speed);
@@ -66,8 +58,8 @@ int move_backward_off_wall(float dist, int speed)
 		}
 		else if(cur_dist > dist_from_wall+.1)
 		{
-			printf("too far from wall\n");
-			drive_direct_at(-speed,-speed+1);
+			//printf("too far from wall\n");
+			drive_direct_at(-speed,-speed+2);
 			sleep(.05);
 			move_forward_at(-speed);
 			sleep(.05);
@@ -92,18 +84,18 @@ int move_forward_off_wall(float dist, int speed)
 	while(dist_traveled <= dist)
 	{
 		cur_dist = analog_to_inches_avg(rightFrontIR,10);
-		printf("\ncur_dist: %f\nrecorded_dist: %f\n",cur_dist,dist_from_wall);
+		//printf("\ncur_dist: %f\nrecorded_dist: %f\n",cur_dist,dist_from_wall);
 		if(cur_dist <= dist_from_wall)
 		{
-			printf("too close to wall\n");
-			drive_direct_at(speed-1,speed);
+			//printf("too close to wall\n");
+			drive_direct_at(speed-2,speed);
 			sleep(.05);
 			move_forward_at(speed);
 			sleep(.05);
 		}
 		else if(cur_dist > dist_from_wall+.1)
 		{
-			printf("too far from wall\n");
+			//printf("too far from wall\n");
 			drive_direct_at(speed,speed-1);
 			sleep(.05);
 			move_forward_at(speed);
@@ -188,7 +180,7 @@ int block_digo_done()
 	while(is_done != 2) 
 	{
 		is_done = is_digo_done();
-		printf("blocking till done! %d\n", is_done);
+		//printf("blocking till done! %d\n", is_done);
 	}
 	return 1;
 }
@@ -210,7 +202,7 @@ int is_digo_done()
 	{
 		sleep(.1);
 		illegal_command();
-		printf("%s\n",ibuf);
+		//printf("%s\n",ibuf);
 	}
     return NACK;
 }
@@ -251,7 +243,7 @@ int drive_direct(int lspeed, float ldistance, int rspeed, float rdistance)
     float rticks = (rdistance*(TICKS_PER_REV_RIGHT/WHEEL_CIRC));
     float lticks = (ldistance*(TICKS_PER_REV_LEFT/WHEEL_CIRC));
     sprintf(obuf,"digo 2:%d:%d 1:%d:%d\r",(int)rticks,rspeed,(int)lticks,lspeed);
-    printf("(r,l): (%f,%f)\n",rticks,lticks);
+    //printf("(r,l): (%f,%f)\n",rticks,lticks);
     return send_command();
 }
 

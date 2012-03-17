@@ -7,20 +7,7 @@
 
 #include <stdio.h>
 #include <math.h>
-
-#define thetaOne 0.0
-#define thetaTwo 8.0 
-#define pie 3.14159
-
-#define leftTophat 14
-#define rightTophat 15
-#define rightFrontIR 2
-
-//#define rightWallTophat 7
-//#define leftWallTophat 6
-//#define leftFrontIR 1
-//#define leftBackIR 3
-//#define rightBackIR 4
+#include "CaptainPlanetGlobals.h"
 
 #ifndef SENSOR_H
 #define SENSOR_H

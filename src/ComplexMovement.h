@@ -7,9 +7,7 @@
  
 #include "Movement.h"
 #include "Sensor.h"
-#include "Dock.h"
-#define SPEED 14
-#define WALL_SPEED 8
+#include "CaptainPlanetGlobals.h"
 
 #ifndef COMPLEX_MOVEMENT_H
 #define COMPLEX_MOVEMENT_H
@@ -22,6 +20,7 @@ void move_from_hydro_to(int);
 void move_from_wind_to(int);
 void move_from_flag_to(int);
 void move_to(int, int);
+void start_movement();
 
 void top()
 {
@@ -38,7 +37,7 @@ void top()
 	block_digo_done();
     move_forward(1.8*12.0,WALL_SPEED);
 	block_digo_done();
-	move_backward(2.2,SPEED);
+	move_backward(WALL_TURN_DISTANCE,SPEED);
 	block_digo_done();
 	turn_right(90.0,SPEED);
 	block_digo_done();
@@ -50,7 +49,7 @@ void bottom()
 	block_digo_done();
 	move_forward(5.0, WALL_SPEED);
 	block_digo_done();
-    move_backward(1.2*12.0, SPEED);
+    move_backward(1.5*12.0, SPEED);
 	block_digo_done();
     turn_right(90, SPEED);
 	block_digo_done();
@@ -60,12 +59,12 @@ void bottom()
 	block_digo_done();
     turn_left(90, SPEED);
 	block_digo_done();
-	move_backward_off_wall(4.*12.0,SPEED);
+	move_backward_off_wall(4.1*12.0,SPEED);
 	turn_right(90.,SPEED);
 	block_digo_done();
 	move_forward(5.0,WALL_SPEED);
 	block_digo_done();
-	move_backward(2.2,SPEED);
+	move_backward(WALL_TURN_DISTANCE,SPEED);
 	block_digo_done();
 	turn_right(90.,SPEED);
 	block_digo_done();
@@ -86,7 +85,7 @@ void diagonal()
 	block_digo_done();
     move_forward(1.8*12.0,WALL_SPEED);
 	block_digo_done();
-	move_backward(2.2,SPEED);
+	move_backward(WALL_TURN_DISTANCE,SPEED);
 	block_digo_done();
 	turn_left(90.0,SPEED);
 	block_digo_done();
@@ -101,7 +100,7 @@ void diagonal()
 	block_digo_done();
     move_forward(1.8*12.0,WALL_SPEED);
 	block_digo_done();
-	move_backward(2.2,SPEED);
+	move_backward(WALL_TURN_DISTANCE,SPEED);
 	block_digo_done();
 	turn_right(90.0,SPEED);
 	block_digo_done();
@@ -117,6 +116,8 @@ void move_to(int orginCorner, int destination)
 		move_from_wind_to(destination);
 	else if(orginCorner == FLAG)
 		move_from_flag_to(destination);
+	else if(orginCorner == NONE)
+		start_movement();
 	else
 		printf("%d\n", destination);
 }
@@ -159,6 +160,30 @@ void move_from_flag_to(int barcode)
 		diagonal();
 	else
 		bottom();
+}
+
+void start_movement()
+{
+	move_forward(3*12, WALL_SPEED);
+	block_digo_done();
+	move_backward(WALL_TURN_DISTANCE, SPEED);
+	block_digo_done();
+	turn_left(90, SPEED);
+	block_digo_done();
+	move_forward_off_wall(1.7*12, SPEED);
+	block_digo_done();
+	turn_right(90.0, SPEED);
+	block_digo_done();
+	move_backward((1.2*12),SPEED);
+	block_digo_done();
+	turn_left(90.0,SPEED);
+	block_digo_done();
+	move_forward(1.8*12, WALL_SPEED);
+	block_digo_done();
+	move_backward(2.2,SPEED);
+	block_digo_done();
+	turn_right(90.0,SPEED);
+	block_digo_done();
 }
 
 #endif

@@ -1,20 +1,17 @@
 // Created on Wed Mar 14 2012
 #include "ComplexMovement.h"
-#include "planner.h"
+#include "Planner.h"
 
 int main() 
 {
 	init_captain_planet_with_our_powers_combined();
 	
-	while(!black_button())
-	printf("Current_time: %f\n",CURRENT_TIME);
-	move_to(FLAG, SOLAR);
+	/*while(!black_button())
+		printf("current_time: %f\nsolar: %d\nwind: %d\nhydro: %d\n\n\n",CURRENT_TIME,SOLAR_IS_ON,WIND_IS_ON,HYDRO_IS_ON);*/
+	move_to(NONE,SOLAR);
 	dock(SOLAR);
 	move_to(SOLAR, HYDRO);
 	dock(HYDRO);
-	move_to(HYDRO, WIND);
-	dock(WIND);
-	move_to(WIND, FLAG);
 	
     serializer_disconnect();
 }

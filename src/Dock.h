@@ -6,24 +6,16 @@
  **/
 #include "Sensor.h"
 #include "Movement.h"
-
-#define LEFT 8
-#define RIGHT 9
-#define SOLAR 0
-#define HYDRO 1
-#define WIND 2
-#define FLAG 3
-#define NONE 4
+#include "CaptainPlanetGlobals.h"
 
 #ifndef DOCK_H
 #define DOCK_H
-
-int DOCK_INTERRUPT = 0;
 
 void docking_phase();
 void send_charge_signal(int);
 void bar_straight(int);
 int charge(int);
+int corner_is_on(int corner);
 void undock();
 
 void dock(int corner)
@@ -40,6 +32,8 @@ void docking_phase()
 	move_forward_at(6);
     bar_straight(1);
 	stop();
+	move_forward(5, SPEED);
+	block_digo_done();
 	//printf("%d", code);
 	//undock();
 }
@@ -87,13 +81,27 @@ int charge(int corner)
 {
     send_charge_signal(corner);
 	int signal_from_arduino = 0;
-	while(!DOCK_INTERRUPT && !signal_from_arduino)
+	while(corner_is_on(corner) && !signal_from_arduino)
 	{
-		signal_from_arduino = get_gpio(5);
+		beep();
+		//signal_from_arduino = get_gpio(5);
+		sleep(1.0);
 	}
    // while(charging())
     //sleep(1);
     //send_Charge_Signal(none);
+}
+
+int corner_is_on(int corner)
+{
+	if(corner==SOLAR)
+		return SOLAR_IS_ON;
+	else if(corner==HYDRO)
+		return HYDRO_IS_ON;
+	else if(corner==WIND)
+		return WIND_IS_ON;
+	else 
+		return -1;
 }
 
 void undock()
