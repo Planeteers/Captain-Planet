@@ -14,6 +14,9 @@ const float WIND_TIMES[][2] = {
 	{-1, -1}
 };
 
+const float PHASE[4] =
+{ 60, 120, 180, 300};
+
 const float COMP_TIME_LENGTH = 300.0;
 float START_TIME;
 float CURRENT_TIME;
@@ -28,6 +31,7 @@ int TIMER_PROCESS_ID;
 #define FLAG 3
 #define NONE 4
 #define SPEED 14
+#define MID 5
 
 int HYDRO_IS_ON = 0;
 int SOLAR_IS_ON = 0;
@@ -51,8 +55,16 @@ int WIND_IS_ON = 0;
 #define thetaTwo 8.0 
 #define pie 3.14159
 
-#define leftTophat 14
-#define rightTophat 15
+#define leftTophat 6
+#define rightTophat 7
 #define rightFrontIR 2
+#define LIGHT_PORT 3
+#define LIGHT_THRESHOLD 400
+
+int CHARGED = 0;
+int CURRENT = MID;
+int PREV = NONE;
+int DEST = NONE;
+int CURRENT_PHASE = 0;
 
 #endif

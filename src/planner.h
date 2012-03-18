@@ -16,6 +16,10 @@ void start_timer();
 void init_captain_planet_with_our_powers_combined();
 void check_time();
 int parse_time_array(const float array[][2]);
+int logic();
+int light_check();
+void wait_phase();
+int opposite(int);
 
 void start_timer()
 {
@@ -51,6 +55,40 @@ int parse_time_array(const float array[][2])
 		if(CURRENT_TIME >= array[i][0] && CURRENT_TIME <= array[i][1]) 
 			return 1;
 	return 0;
+}
+
+int logic()
+{
+	if(PREV == HYDRO && CURRENT == MID)
+		wait_phase();
+	if(CURRENT == MID && !CHARGED)
+		return light_check();
+	if(CHARGED)
+		return FLAG;
+	if (!CHARGED && CURRENT == FLAG)
+		return opposite(PREV);
+	if(!CHARGED)
+		return MID;
+}
+
+void wait_phase()
+{
+	while(CURRENT_TIME < PHASE[CURRENT_PHASE])
+		sleep(1);
+}
+
+int light_check()
+{
+	if(is_light_on())
+		return SOLAR;
+	return HYDRO;
+}
+
+int opposite(int barcode)
+{
+	if(barcode == SOLAR)
+		return HYDRO;
+	return SOLAR;
 }
 
 #endif

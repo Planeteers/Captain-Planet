@@ -18,12 +18,17 @@ int charge(int);
 int corner_is_on(int corner);
 void undock();
 
-void dock(int corner)
+int dock(int corner)
 {
-	docking_phase();
-	send_charge_signal(corner);
-	send_charge_signal(NONE);
-	undock();
+	if(corner != MID)
+	{
+		int charged;
+		docking_phase();
+		charged=charge(corner);
+		undock();
+		return charged;
+	}
+	return CHARGED;
 }
 
 //Complex Movement leaves us right in front of the cubbie. This will take us to the first barcode.

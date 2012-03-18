@@ -19,6 +19,7 @@ float degree_to_radian(float);
 float angle_offset(int, int);
 int see_bar(int);
 int bar_sensor(int, int);
+int is_light_on();
 
 int analog_10_avg(int port)
 {
@@ -91,6 +92,11 @@ int see_bar(int port1)
 int bar_sensor(int port1, int port2)
 {
 	return(see_bar(port1) && see_bar(port2));
+}
+
+int is_light_on()
+{
+	return(analog10(LIGHT_PORT) <= LIGHT_THRESHOLD);
 }
 
 #endif
