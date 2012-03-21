@@ -112,12 +112,14 @@ void move_to_mid_from(int orginCorner)
 {
 	if (orginCorner == SOLAR) 
 	{
-		move_backward_off_wall(2.*12, SPEED);
-		turn_left(90, SPEED);
+		turn_left(180, SPEED);
 		block_digo_done();
-		move_forward(2.2, WALL_SPEED);
+		move_forward_off_wall(2.*12, SPEED);
+		turn_right(90, SPEED);
 		block_digo_done();
-		move_backward(2.2, SPEED);
+		move_forward(5, WALL_SPEED);
+		block_digo_done();
+		move_backward(2.4, SPEED);
 		block_digo_done();
 	}
 	else if(orginCorner == HYDRO)
@@ -136,7 +138,12 @@ void move_to_mid_from(int orginCorner)
 		block_digo_done();
 		turn_left(90, SPEED);
 		block_digo_done();
-		move_backward_off_wall(2.*12.0,SPEED);
+		move_backward_off_wall(1.8*12.0,SPEED);
+		turn_right(90,SPEED);
+		block_digo_done();
+		move_forward(5,WALL_SPEED);
+		block_digo_done();
+		move_backward(2.4,SPEED);
 	}
 }
 
@@ -226,12 +233,12 @@ void move_from_mid_to(int barcode)
 	else if(barcode == SOLAR)
 	{
 		// Go to Solar
-		turn_left(90, SPEED);
+		turn_left(88, SPEED);
 		block_digo_done();
 		move_backward_off_wall(1.7*12, SPEED);
 		turn_right(90, SPEED);
 		block_digo_done();
-		move_forward(2.2, WALL_SPEED);
+		move_forward(5, WALL_SPEED);
 		block_digo_done();
 		move_backward(2.2, SPEED);
 		block_digo_done();
@@ -245,7 +252,7 @@ void start_movement()
 {
 	move_forward(3*12, WALL_SPEED);
 	block_digo_done();
-	move_backward(WALL_TURN_DISTANCE, SPEED);
+	move_backward(2.4, SPEED);
 	block_digo_done();
 }
 

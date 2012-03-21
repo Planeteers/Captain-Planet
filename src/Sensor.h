@@ -86,7 +86,7 @@ float angle_offset(int port1, int port2)
 
 int see_bar(int port1)
 {
-	return(!digital(port1));
+	return(analog10(port1) > BAR_THRESHOLD);
 }
 
 int bar_sensor(int port1, int port2)

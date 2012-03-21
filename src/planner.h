@@ -16,7 +16,7 @@ void start_timer();
 void init_captain_planet_with_our_powers_combined();
 void check_time();
 int parse_time_array(const float array[][2]);
-int logic();
+int calculate_desination();
 int light_check();
 void wait_phase();
 int opposite(int);
@@ -57,7 +57,7 @@ int parse_time_array(const float array[][2])
 	return 0;
 }
 
-int logic()
+int calculate_desination()
 {
 	if(PREV == HYDRO && CURRENT == MID)
 		wait_phase();

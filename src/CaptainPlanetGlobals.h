@@ -57,9 +57,12 @@ int WIND_IS_ON = 0;
 
 #define leftTophat 6
 #define rightTophat 7
+
 #define rightFrontIR 2
 #define LIGHT_PORT 3
 #define LIGHT_THRESHOLD 400
+
+#define BAR_THRESHOLD 700
 
 int CHARGED = 0;
 int CURRENT = MID;

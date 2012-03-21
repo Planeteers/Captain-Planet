@@ -51,7 +51,7 @@ int move_backward_off_wall(float dist, int speed)
 		if(cur_dist <= dist_from_wall)
 		{
 			//printf("too close to wall\n");
-			drive_direct_at(-speed+1,-speed);
+			drive_direct_at(-speed+2,-speed);
 			sleep(.05);
 			move_forward_at(-speed);
 			sleep(.05);
@@ -59,7 +59,7 @@ int move_backward_off_wall(float dist, int speed)
 		else if(cur_dist > dist_from_wall+.1)
 		{
 			//printf("too far from wall\n");
-			drive_direct_at(-speed,-speed+2);
+			drive_direct_at(-speed,-speed+1);
 			sleep(.05);
 			move_forward_at(-speed);
 			sleep(.05);
