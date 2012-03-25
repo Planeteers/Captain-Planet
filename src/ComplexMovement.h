@@ -26,8 +26,6 @@ void move_from_mid_to(int barcode);
 
 void top()
 {
-	turn_left(180.,SPEED);
-	block_digo_done();
     move_forward_off_wall(4.2*12.0, SPEED);
 	//dist += analog_to_inches_avg(rightFrontIR,10);
     turn_right(90, SPEED);
@@ -41,13 +39,13 @@ void top()
 	block_digo_done();
 	move_backward(WALL_TURN_DISTANCE,SPEED);
 	block_digo_done();
-	turn_right(90.0,SPEED);
+	turn_left(90.0,SPEED);
 	block_digo_done();
 }
 
 void bottom()
 {
-    turn_left(90, SPEED);
+    turn_right(90, SPEED);
 	block_digo_done();
 	move_forward(5.0, WALL_SPEED);
 	block_digo_done();
@@ -68,14 +66,12 @@ void bottom()
 	block_digo_done();
 	move_backward(WALL_TURN_DISTANCE,SPEED);
 	block_digo_done();
-	turn_right(90.,SPEED);
+	turn_left(90.,SPEED);
 	block_digo_done();
 }
 
 void diagonal()
 {
-	turn_left(180.,SPEED);
-	block_digo_done();
     move_forward_off_wall(4.2*12.0, SPEED);
 	//dist += analog_to_inches_avg(rightFrontIR,10);
     turn_right(90, SPEED);
@@ -104,7 +100,7 @@ void diagonal()
 	block_digo_done();
 	move_backward(WALL_TURN_DISTANCE,SPEED);
 	block_digo_done();
-	turn_right(90.0,SPEED);
+	turn_left(90.0,SPEED);
 	block_digo_done();
 }
 
@@ -112,8 +108,6 @@ void move_to_mid_from(int orginCorner)
 {
 	if (orginCorner == SOLAR) 
 	{
-		turn_left(180, SPEED);
-		block_digo_done();
 		move_forward_off_wall(2.*12, SPEED);
 		turn_right(90, SPEED);
 		block_digo_done();
@@ -124,7 +118,7 @@ void move_to_mid_from(int orginCorner)
 	}
 	else if(orginCorner == HYDRO)
 	{
-		turn_left(90, SPEED);
+		turn_right(90, SPEED);
 		block_digo_done();
 		move_forward(5.0, WALL_SPEED);
 		block_digo_done();
@@ -227,7 +221,7 @@ void move_from_mid_to(int barcode)
 		block_digo_done();
 		move_backward(2.2,SPEED);
 		block_digo_done();
-		turn_right(90.0,SPEED);
+		turn_left(90.0,SPEED);
 		block_digo_done();
 	}
 	else if(barcode == SOLAR)
@@ -242,7 +236,7 @@ void move_from_mid_to(int barcode)
 		block_digo_done();
 		move_backward(2.2, SPEED);
 		block_digo_done();
-		turn_right(90, SPEED);
+		turn_left(90, SPEED);
 		block_digo_done();
 	}
 

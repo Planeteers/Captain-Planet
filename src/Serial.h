@@ -146,8 +146,11 @@ int set_gpio(int pin, int value)
 int get_gpio(int pin)
 {
 	sprintf(obuf,"getio %d\r",pin);
-    if(!send_command()) return FALSE;
-    return TRUE;
+    if(send_command()) 
+		return ibuf[2]-'0';
+		//printf("%d\n", ibuf[2]-'0');
+	else
+		return -1;
 }
 
 /**

@@ -1,18 +1,7 @@
 #ifndef CAPTAIN_PLANET_GLOBALS_H
 #define CAPTAIN_PLANET_GLOBALS_H
 
-//
-const float SOLAR_TIMES[][2] = {
-	{-1, -1}
-};
-
-const float HYDRO_TIMES[][2] = {
-	{-1, -1}
-};
-
-const float WIND_TIMES[][2] = {
-	{-1, -1}
-};
+const int NUM_PHASES = 4;
 
 const float PHASE[4] =
 { 60, 120, 180, 300};
@@ -49,19 +38,16 @@ int WIND_IS_ON = 0;
 										//the wheels
 #define WHEEL_BASE 9.0 //distance between center of wheels
 
-
-
 #define thetaOne 0.0
 #define thetaTwo 8.0 
 #define pie 3.14159
 
 #define leftTophat 6
 #define rightTophat 7
-
 #define rightFrontIR 2
 #define LIGHT_PORT 3
-#define LIGHT_THRESHOLD 400
 
+#define LIGHT_THRESHOLD 400
 #define BAR_THRESHOLD 700
 
 int CHARGED = 0;
@@ -69,5 +55,16 @@ int CURRENT = MID;
 int PREV = NONE;
 int DEST = NONE;
 int CURRENT_PHASE = 0;
+
+int CHARGING 		   = 6;
+int ERROR 	 		   = 7;
+int DONE 	 		   = 8;
+int WAITING_FOR_SIGNAL = 9;
+int TIME_UP			   = 10;
+
+int GPIO_LINE_IN_ONE   = 8;
+int GPIO_LINE_IN_TWO   = 9;
+int GPIO_LINE_OUT_ONE  = 6;
+int GPIO_LINE_OUT_TWO  = 7;
 
 #endif
