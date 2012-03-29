@@ -1,30 +1,9 @@
 #ifndef CAPTAIN_PLANET_GLOBALS_H
 #define CAPTAIN_PLANET_GLOBALS_H
 
-const int NUM_PHASES = 4;
-
-const float PHASE[4] =
-{ 60, 120, 180, 300};
-
-const float COMP_TIME_LENGTH = 300.0;
-float START_TIME;
-float CURRENT_TIME;
-
-int TIMER_PROCESS_ID;
-
-#define LEFT 8
-#define RIGHT 9
-#define SOLAR 0
-#define HYDRO 1
-#define WIND 2
-#define FLAG 3
-#define NONE 4
-#define SPEED 14
-#define MID 5
-
-int HYDRO_IS_ON = 0;
-int SOLAR_IS_ON = 0;
-int WIND_IS_ON = 0;
+#define NUM_PHASES 4
+#define COMP_TIME_LENGTH 300.0
+#define INVALID_TIME -1
 
 #define SPEED 14
 #define WALL_SPEED 8
@@ -50,21 +29,44 @@ int WIND_IS_ON = 0;
 #define LIGHT_THRESHOLD 400
 #define BAR_THRESHOLD 700
 
+#define GPIO_LINE_IN_ONE 8
+#define GPIO_LINE_IN_TWO 9
+#define GPIO_LINE_OUT_ONE 6
+#define GPIO_LINE_OUT_TWO 7
+
+const enum {
+	CHARGING = 0,
+	ERROR,
+	DONE,
+	WAITING_FOR_SIGNAL,
+	TIME_UP
+}SIGNALS;
+
+const enum {
+	SOLAR = 0,
+	HYDRO,
+	WIND,
+	FLAG,
+	NONE,
+	MID,
+	ALL,
+	UNKNOWN
+}CORNERS;
+
+const float PHASE_TIMES[NUM_PHASES] = { 60, 120, 180, COMP_TIME_LENGTH};
+
+float START_TIME;
+float CURRENT_TIME;
+
+int WATCHDOG_ACTIVE = 0;
+int TIMER_INTERRUPT = 0;
 int CHARGED = 0;
 int CURRENT = MID;
-int PREV = NONE;
-int DEST = NONE;
-int CURRENT_PHASE = 0;
+int DESTINATION = NONE;
 
-int CHARGING 		   = 6;
-int ERROR 	 		   = 7;
-int DONE 	 		   = 8;
-int WAITING_FOR_SIGNAL = 9;
-int TIME_UP			   = 10;
+int TIMER_PROCESS_ID;
+int TIMER_WATCHDOG_ID;
 
-int GPIO_LINE_IN_ONE   = 8;
-int GPIO_LINE_IN_TWO   = 9;
-int GPIO_LINE_OUT_ONE  = 6;
-int GPIO_LINE_OUT_TWO  = 7;
+int SOURCE_ORDER[NUM_PHASES] = {UNKNOWN,UNKNOWN,UNKNOWN,ALL};
 
 #endif

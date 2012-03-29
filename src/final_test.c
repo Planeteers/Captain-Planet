@@ -5,21 +5,16 @@ void main()
 {
 	init_captain_planet_with_our_powers_combined();
 	start_movement();
-	move_to(MID, SOLAR);
-	dock(SOLAR);
-	move_to(SOLAR,MID);
-	move_to(MID,HYDRO);
-	dock(HYDRO);
-	move_to(HYDRO,MID);
-	/*while(!black_button())
+	
+	int cycle_start_time;
+	while(!black_button())
 	{
-		DEST=calculate_desination();
-		move_to(CURRENT,DEST);
-		PREV=CURRENT;
-		CURRENT=DEST;
-		DEST=NONE;
+		cycle_start_time = CURRENT_TIME;
+		DESTINATION=calculate_desination();
+		move_to(CURRENT,DESTINATION);
+		CURRENT=DESTINATION;
 		CHARGED = dock(CURRENT);
-		CURRENT_PHASE++;
-	}*/
+		update_source_order(cycle_start_time);
+	}
 	serializer_disconnect();
 }

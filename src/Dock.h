@@ -15,12 +15,9 @@ void docking_phase();
 void send_charge_signal(int);
 void bar_straight(int);
 int charge(int);
-int corner_is_on(int corner);
 void undock();
 int get_charge_signal();
 int wait_for_change_from_arduino();
-int get_phase(int time);
-int timer_interrupt(int start_time);
 
 int dock(int corner)
 {
@@ -108,11 +105,14 @@ int charge(int corner)
 	{
 		int prev_signal_from_arduino = signal_from_arduino;
 		int start_time = CURRENT_TIME;
-		while(!timer_interrupt(start_time) && signal_from_arduino != prev_signal_from_arduino)
+		WATCHDOG_ACTIVE = 1;
+		while(!TIMER_INTERRUPT && signal_from_arduino != prev_signal_from_arduino)
 		{
 			signal_from_arduino = get_charge_signal();
+			printf("Time: %f\n",CURRENT_TIME);
 			sleep(1.0);
 		}
+		WATCHDOG_ACTIVE = 0;
 		if(signal_from_arduino == DONE)
 			return_value = DONE;
 		else if(signal_from_arduino == ERROR)
@@ -131,7 +131,7 @@ int charge(int corner)
 }
 
 int wait_for_change_from_arduino(int prev_signal_from_arduino)
-{
+{	
 	int signal_from_arduino = get_charge_signal();
 	while(signal_from_arduino != prev_signal_from_arduino)
 	{
@@ -139,18 +139,6 @@ int wait_for_change_from_arduino(int prev_signal_from_arduino)
 		sleep(1.0);
 	}	
 	return signal_from_arduino;
-}
-
-int corner_is_on(int corner)
-{
-	if(corner==SOLAR)
-		return SOLAR_IS_ON;
-	else if(corner==HYDRO)
-		return HYDRO_IS_ON;
-	else if(corner==WIND)
-		return WIND_IS_ON;
-	else 
-		return -1;
 }
 
 void undock()
@@ -177,20 +165,6 @@ int get_charge_signal()
 		return CHARGING;
 	if(gpio_line_one == -1 || gpio_line_two == -1)
 		return -1;
-}
-
-int get_phase(int time)
-{
-	int i;
-	for(i = 0;i<NUM_PHASES;i++)
-		if(time<PHASE[i])
-			return i;
-	return i;
-}
-
-int timer_interrupt(int start_time)
-{
-	return (get_phase(start_time) < get_phase(CURRENT_TIME));
 }
 
 #endif
