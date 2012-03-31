@@ -156,7 +156,7 @@ void move_to(int orginCorner, int destination)
 	else if(orginCorner == MID)
 		move_from_mid_to(destination);
 	else
-		printf("%d\n", destination);
+		return;
 }
 
 void move_from_solar_to(int barcode)
@@ -210,10 +210,10 @@ void move_from_mid_to(int barcode)
 		// Go to Hydro
 		turn_left(90, SPEED);
 		block_digo_done();
-		move_forward_off_wall(1.7*12, SPEED);
+		move_forward_off_wall(1.9*12, SPEED);
 		turn_right(90.0, SPEED);
 		block_digo_done();
-		move_backward((1.2*12),SPEED);
+		move_backward((1.0*12),SPEED);
 		block_digo_done();
 		turn_left(90.0,SPEED);
 		block_digo_done();
@@ -244,7 +244,9 @@ void move_from_mid_to(int barcode)
 
 void start_movement()
 {
-	move_forward(3*12, WALL_SPEED);
+	move_forward(2.5*12, SPEED);
+	block_digo_done();
+	move_forward(.5*12, WALL_SPEED);
 	block_digo_done();
 	move_backward(2.4, SPEED);
 	block_digo_done();

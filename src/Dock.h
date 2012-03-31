@@ -38,7 +38,7 @@ void docking_phase()
 	move_backward_at(6);
 	bar_straight(-1);
 	stop();
-	move_backward(8.5,WALL_SPEED);
+	move_backward(7.5,WALL_SPEED-1);
 	block_digo_done();
 	//printf("%d", code);
 	//undock();
@@ -68,7 +68,7 @@ void send_charge_signal(int corner)
             set_gpio(GPIO_LINE_OUT_TWO,1);
             break;
 		default:
-			printf("Invalid Switch Case\n");
+			printf("Invalid Switch Case: Dock.h, send_charge_signal\n");
 			break;
     }
 }
@@ -88,6 +88,7 @@ void bar_straight(int direction)
 
 int charge(int corner)
 {
+	return ERROR;
 	int return_value = NONE;
 	int signal_from_arduino = get_charge_signal();
     send_charge_signal(corner);
@@ -98,7 +99,7 @@ int charge(int corner)
 		send_charge_signal(NONE);
 		signal_from_arduino = wait_for_change_from_arduino(ERROR);
 		if(signal_from_arduino != WAITING_FOR_SIGNAL)
-			printf("OMG SOMETHING WENT WRONG\n");
+			printf("Expected waiting for signal after recieving initial error (tried to charge but failed)\n");
 		return ERROR;
 	}
 	else if(signal_from_arduino == CHARGING)
@@ -109,7 +110,7 @@ int charge(int corner)
 		while(!TIMER_INTERRUPT && signal_from_arduino != prev_signal_from_arduino)
 		{
 			signal_from_arduino = get_charge_signal();
-			printf("Time: %f\n",CURRENT_TIME);
+			//printf("Time: %f\n",CURRENT_TIME);
 			sleep(1.0);
 		}
 		WATCHDOG_ACTIVE = 0;
@@ -122,11 +123,11 @@ int charge(int corner)
 		send_charge_signal(NONE);
 		signal_from_arduino = wait_for_change_from_arduino(signal_from_arduino);
 		if(signal_from_arduino != WAITING_FOR_SIGNAL)
-			printf("OMG SOMETHING WENT WRONG\n");
+			printf("We successfully started charging or timer interrupt, or we're full.\n");
 		return return_value;
 	}
 	else
-		printf("OMG SOMETHING WENT WRONG AGAIN\n");
+		printf("WTF\n");
 	return ERROR;
 }
 
