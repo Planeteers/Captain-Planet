@@ -32,6 +32,13 @@ int stop();
 int move_forward_off_wall(float dist, int speed);
 int move_backward_off_wall(float dist, int speed);
 
+/*int run_into_wall(int speed)
+{
+	move_forward_at(speed);
+	
+	while()
+}*/
+
 /**
  *	moves forward while continuously polling the side pointing IR sensor. if 
  *	the distance becomes significantly different from the first recorded value,

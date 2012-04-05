@@ -36,7 +36,7 @@ void start_timer()
 
 void init_captain_planet_with_our_powers_combined()
 {
-	set_each_analog_state(1,1,1,0,1,1,0,0);
+	set_each_analog_state(1,1,1,1,1,1,0,0);
 	serializer_connect();
 	TIMER_PROCESS_ID = start_process(start_timer);
 	TIMER_WATCHDOG_ID = start_process(timer_watchdog);

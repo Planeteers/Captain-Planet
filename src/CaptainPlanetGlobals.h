@@ -29,10 +29,10 @@
 #define LIGHT_THRESHOLD 400
 #define BAR_THRESHOLD 700
 
-#define GPIO_LINE_IN_ONE 8
-#define GPIO_LINE_IN_TWO 9
-#define GPIO_LINE_OUT_ONE 6
-#define GPIO_LINE_OUT_TWO 7
+#define GPIO_LINE_IN_ONE 8  //red
+#define GPIO_LINE_IN_TWO 9  //black
+#define GPIO_LINE_OUT_ONE 6 //yellow
+#define GPIO_LINE_OUT_TWO 7 //green
 
 const enum {
 	CHARGING = 0,

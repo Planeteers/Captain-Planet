@@ -38,7 +38,7 @@ void docking_phase()
 	move_backward_at(6);
 	bar_straight(-1);
 	stop();
-	move_backward(7.5,WALL_SPEED-1);
+	move_backward(5,3);
 	block_digo_done();
 	//printf("%d", code);
 	//undock();
@@ -88,13 +88,71 @@ void bar_straight(int direction)
 
 int charge(int corner)
 {
-	return ERROR;
 	int return_value = NONE;
 	int signal_from_arduino = get_charge_signal();
-    send_charge_signal(corner);
-	signal_from_arduino = wait_for_change_from_arduino(signal_from_arduino);
 	
-	if(signal_from_arduino == ERROR)
+	printf("Resseting by sending none a bunch\n");
+	while(signal_from_arduino != WAITING_FOR_SIGNAL)
+	{
+		send_charge_signal(NONE);
+		signal_from_arduino = get_charge_signal();
+		printf("in reset\n");
+	}
+	
+	printf("Setting charge state to corner\n");
+    while(signal_from_arduino == WAITING_FOR_SIGNAL)
+	{
+		send_charge_signal(corner);
+		signal_from_arduino = get_charge_signal();
+		printf("in set state\n");
+	}
+	
+	printf("dealing with response from setting state to corner\n");
+	if(signal_from_arduino == CHARGING)
+	{
+		if(corner != FLAG)
+		{
+			WATCHDOG_ACTIVE = 1;
+		}
+		while(signal_from_arduino == CHARGING && !TIMER_INTERRUPT)
+		{
+			printf("charging, time: %f\n",CURRENT_TIME);
+			signal_from_arduino = get_charge_signal();
+		}
+		WATCHDOG_ACTIVE = 0;
+	}
+	else if(signal_from_arduino == ERROR)
+	{
+		printf("We got a error when trying to charge!\n");
+		return ERROR;
+	}
+	
+	
+	///Returning Done all the time even when expecting none
+	printf("interrpreting signal from charge phase\n");
+	if(signal_from_arduino == DONE)
+		return DONE;
+	else if(signal_from_arduino == ERROR)
+		return ERROR;
+	else if(signal_from_arduino == CHARGING)
+	{
+		printf("Interrupting charging\n");
+		while(signal_from_arduino != WAITING_FOR_SIGNAL)
+		{
+			send_charge_signal(NONE);
+			signal_from_arduino = get_charge_signal();
+			printf(".");
+		}
+		printf("\nInterrupted!\n");
+		return NONE;
+	}
+	else 
+	{
+		printf("Charge: WTF\n");
+		return ERROR;
+	}
+	
+	/*if(signal_from_arduino == ERROR)
 	{
 		send_charge_signal(NONE);
 		signal_from_arduino = wait_for_change_from_arduino(ERROR);
@@ -104,13 +162,14 @@ int charge(int corner)
 	}
 	else if(signal_from_arduino == CHARGING)
 	{
+		printf("entered charging statement\n\n");
 		int prev_signal_from_arduino = signal_from_arduino;
 		int start_time = CURRENT_TIME;
 		WATCHDOG_ACTIVE = 1;
 		while(!TIMER_INTERRUPT && signal_from_arduino != prev_signal_from_arduino)
 		{
 			signal_from_arduino = get_charge_signal();
-			//printf("Time: %f\n",CURRENT_TIME);
+			printf("Time: %f\n",CURRENT_TIME);
 			sleep(1.0);
 		}
 		WATCHDOG_ACTIVE = 0;
@@ -126,18 +185,21 @@ int charge(int corner)
 			printf("We successfully started charging or timer interrupt, or we're full.\n");
 		return return_value;
 	}
+	else if(signal_from_arduino == DONE)
+		return DONE;
 	else
 		printf("WTF\n");
-	return ERROR;
+	return ERROR;*/
 }
 
 int wait_for_change_from_arduino(int prev_signal_from_arduino)
 {	
 	int signal_from_arduino = get_charge_signal();
-	while(signal_from_arduino != prev_signal_from_arduino)
+	while(signal_from_arduino != prev_signal_from_arduino)	
 	{
+		printf("in wait_for_change_from_arduino\n");
 		signal_from_arduino = get_charge_signal();
-		sleep(1.0);
+		sleep(.5);
 	}	
 	return signal_from_arduino;
 }
@@ -155,17 +217,30 @@ int get_charge_signal()
 {
 	int gpio_line_one = get_gpio(GPIO_LINE_IN_ONE);
 	int gpio_line_two = get_gpio(GPIO_LINE_IN_TWO);
-	printf("recieving: %d%d\n\n",gpio_line_one,gpio_line_two);
 	if(gpio_line_one == 0 && gpio_line_two == 0)
+	{
+		printf("Recieved: WAITING_FOR_SIGNAL\n");
 		return WAITING_FOR_SIGNAL;
+	}
 	if(gpio_line_one == 0 && gpio_line_two == 1)
+	{
+		printf("Recieved: ERROR\n");
 		return ERROR;
+	}
 	if(gpio_line_one == 1 && gpio_line_two == 0)
+	{
+		printf("Recieved: DONE\n");
 		return DONE;
+	}
 	if(gpio_line_one == 1 && gpio_line_two == 1)
+	{
+		printf("Recieved: CHARGING\n");
 		return CHARGING;
+	}
 	if(gpio_line_one == -1 || gpio_line_two == -1)
+	{
 		return -1;
+	}
 }
 
 #endif
