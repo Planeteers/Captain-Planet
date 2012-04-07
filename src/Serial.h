@@ -12,7 +12,7 @@
 #define SERIAL_H
 
 //size of the i/o buffer used to communicate with the serializer
-#define   BUF_SIZE   64
+#define   BUF_SIZE   32
 #define   ACK        1 //Acknowledged signal
 #define   NACK       0 //not acknowledged signal
 #define   TRUE       1 
@@ -100,13 +100,9 @@ void serializer_connect() {
     return ;
 }
 
-/**
- *	Routine to send a command to the Serializer 3.0 
- *	Command should be placed in global output buffer, obuf.
- *	Waits for response from the Serializer which is placed in ibuf.
- **/
-int send_command() 
+int send_command_rec(int rec_depth)
 {
+	if(rec_depth > 3) return NACK;
 	int i;
     int   bytes_read ;
 	for(i=BUF_SIZE-1;i>=0;i--)
@@ -117,10 +113,20 @@ int send_command()
     bytes_read = read(SERIALIZER, ibuf, BUF_SIZE);  // get the response
     if ( (bytes_read != 0) && (strstr(ibuf, NACKstr) == NULL) ) return ACK ;
     else {
-		printf("FAILURE: %d\n",bytes_read);
+		printf("FAILURE: %d, Attempt: %d\n",bytes_read,rec_depth);
 		//illegal_command();
-		return NACK ;
+		return send_command_rec(rec_depth+1);
 	}
+}
+
+/**
+ *	Routine to send a command to the Serializer 3.0 
+ *	Command should be placed in global output buffer, obuf.
+ *	Waits for response from the Serializer which is placed in ibuf.
+ **/
+int send_command() 
+{
+	return send_command_rec(0);
 }
 
 /**

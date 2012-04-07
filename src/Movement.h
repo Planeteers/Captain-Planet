@@ -31,13 +31,37 @@ int straighten_off_wall(int right,int speed);
 int stop();
 int move_forward_off_wall(float dist, int speed);
 int move_backward_off_wall(float dist, int speed);
+int run_into_wall(int);
+int move_arc(float, float);
 
-/*int run_into_wall(int speed)
+
+int move_arc(float theta, float radius)
+{
+	float right_wheel_length = (theta/360.0)*(2*PIE*(radius+(.5*WHEEL_BASE)));
+	float left_wheel_length = (theta/360.0)*(2*PIE*(radius-(.5*WHEEL_BASE)));
+	drive_direct(SPEED, right_wheel_length, SPEED-2, left_wheel_length);
+}
+
+int run_into_wall(int speed)
 {
 	move_forward_at(speed);
 	
-	while()
-}*/
+	int i;
+	int interrupt = 0;
+	int actual;
+	
+	while(!interrupt)
+	{
+		actual = accel_x();
+		//printf("act: %d\n",actual);
+		if(-ACCEL_THRESHOLD > actual)
+			interrupt = 1;
+	}
+	printf("act: %d\n",actual);
+	beep();
+	sleep(.5);
+	stop();
+}
 
 /**
  *	moves forward while continuously polling the side pointing IR sensor. if 

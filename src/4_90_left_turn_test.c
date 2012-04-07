@@ -5,29 +5,20 @@
  *  Description: turns 4 times to the left and prints encoder values after each turn.
  **/
 
-#include "Movement.h"
+#include "Planner.h"
 
 int main()
-{
-    int speed = 10;
-    
-    serializer_connect();
-    turn_left(90.,speed);
-    block_digo_done();
-    sleep(1.0);
-    print_encoders();
-    turn_left(90.,speed);
-    block_digo_done();
-    sleep(1.0);
-    print_encoders();
-    turn_left(90.,speed);
-    block_digo_done();
-    sleep(1.0);
-    print_encoders();
-    turn_left(90.,speed);
-    block_digo_done(); 
-    print_encoders();
-	sleep(1.0);
+{	
+	init_captain_planet_with_our_powers_combined();
+	
+	int speed = 14;
+	
+	move_forward_at(WALL_SPEED);
+	
+	while(!b_button());
+	
+	stop();
+	
     serializer_disconnect();
 }
 

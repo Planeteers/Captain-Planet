@@ -36,7 +36,7 @@ void start_timer()
 
 void init_captain_planet_with_our_powers_combined()
 {
-	set_each_analog_state(1,1,1,1,1,1,0,0);
+	set_each_analog_state(1,1,1,0,1,1,0,0);
 	serializer_connect();
 	TIMER_PROCESS_ID = start_process(start_timer);
 	TIMER_WATCHDOG_ID = start_process(timer_watchdog);
@@ -51,7 +51,8 @@ int light_check()
 int opposite(int barcode)
 {
 	if(barcode == SOLAR) return HYDRO;
-	return SOLAR;
+	else if(barcode == HYDRO) return SOLAR;
+	else return UNKNOWN;
 }
 
 int get_phase(float time)
@@ -95,12 +96,14 @@ int calculate_destination()
 	float start_time = CURRENT_TIME;
 	int phase = get_phase(start_time);
 	
-	if(CHARGED == DONE) return FLAG;
+	if(CHARGED == DONE && CURRENT != FLAG) return FLAG;
 	
-	if(phase == 0)
+	else if(phase == 0)
 		if(SOURCE_ORDER[phase] == UNKNOWN)
 			return light_check();
-		else
+		else if(SOURCE_ORDER[phase] == SOLAR || SOURCE_ORDER[phase] == HYDRO)
+			return SOURCE_ORDER[0];
+		else 
 			return MID;
 	else if(phase == 1)
 		if(SOURCE_ORDER[0] == SOLAR || SOURCE_ORDER[0] == HYDRO)
@@ -112,8 +115,12 @@ int calculate_destination()
 	    else
 			return MID;
 	else if(phase == 2)
-		if(SOURCE_ORDER[2] != WIND)
+		if(SOURCE_ORDER[2] != WIND && SOURCE_ORDER[2] != UNKNOWN)
 			return SOURCE_ORDER[2];
+		else if(SOURCE_ORDER[2] == UNKNOWN && CURRENT != MID)
+			return MID;
+		else if(SOURCE_ORDER[2] == UNKNOWN)
+			return light_check();
 		else
 			return HYDRO;
 	else
@@ -125,7 +132,7 @@ void update_source_order(float cycle_start_time)
 	//get the phase of the passed time
 	int cycle_phase = get_phase(cycle_start_time);
 	
-	printf("cycle_phase: %d\n", cycle_phase);
+	//printf("cycle_phase: %d\n", cycle_phase);
 	
 	if(cycle_phase > 2) return;
 	
@@ -136,19 +143,12 @@ void update_source_order(float cycle_start_time)
 		{
 			SOURCE_ORDER[cycle_phase] = CURRENT;
 		}
-		else if(CURRENT == HYDRO && CHARGED == ERROR)
-		{
-			if(cycle_phase == 1)
-				SOURCE_ORDER[cycle_phase] = SOLAR;
-			SOURCE_ORDER[cycle_phase] = WIND;
-			//printf("HRRRRRRR!\n");
-		}
 		else if(CURRENT == SOLAR)
-		{
 			SOURCE_ORDER[cycle_phase] = SOLAR;
-		}
+		else if(CURRENT == HYDRO && CHARGED == ERROR && SOURCE_ORDER[0] != WIND && SOURCE_ORDER[1]!=WIND)
+			SOURCE_ORDER[cycle_phase] = WIND;
 		else
-			printf("we are at solar and not charging or something went terribly wrong\n");
+			printf("Not enough information to make an accurate guess of source orders.\n");
 	}
 	
 	//attempt to calculate what we believe the last phase source is
@@ -163,17 +163,11 @@ int calculate_last_source()
 {
 	// if either of the previous two sources are unknown we cannot predict the third
 	if(SOURCE_ORDER[0] == UNKNOWN || SOURCE_ORDER[1] == UNKNOWN)
-	{
 		return UNKNOWN;
-	}
 	if(SOURCE_ORDER[0] == WIND)
-	{
 		return opposite(SOURCE_ORDER[1]);
-	}
 	if(SOURCE_ORDER[1] == WIND)
-	{
 		return opposite(SOURCE_ORDER[0]);
-	}
 	return WIND;
 }
 

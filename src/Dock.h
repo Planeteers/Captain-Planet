@@ -11,7 +11,7 @@
 #ifndef DOCK_H
 #define DOCK_H
 
-void docking_phase();
+void docking_phase(int);
 void send_charge_signal(int);
 void bar_straight(int);
 int charge(int);
@@ -24,7 +24,7 @@ int dock(int corner)
 	if(corner != MID)
 	{
 		int signal_from_arduino;
-		docking_phase();
+		docking_phase(corner);
 		signal_from_arduino=charge(corner);
 		undock();
 		return signal_from_arduino;
@@ -33,12 +33,17 @@ int dock(int corner)
 }
 
 //Complex Movement leaves us right in front of the cubbie. This will take us to the first barcode.
-void docking_phase()
+void docking_phase(int corner)
 {
+	int distance = 0;
+	if(corner == HYDRO)
+		distance = 4;
+	else if(corner == FLAG)
+		distance = 2;
 	move_backward_at(6);
 	bar_straight(-1);
 	stop();
-	move_backward(5,3);
+	move_backward(6-distance,3);
 	block_digo_done();
 	//printf("%d", code);
 	//undock();
@@ -88,6 +93,9 @@ void bar_straight(int direction)
 
 int charge(int corner)
 {
+	#ifdef NO_ARDUINO
+		return DONE;
+	#endif
 	int return_value = NONE;
 	int signal_from_arduino = get_charge_signal();
 	
@@ -136,14 +144,14 @@ int charge(int corner)
 		return ERROR;
 	else if(signal_from_arduino == CHARGING)
 	{
-		printf("Interrupting charging\n");
+		//printf("Interrupting charging\n");
 		while(signal_from_arduino != WAITING_FOR_SIGNAL)
 		{
 			send_charge_signal(NONE);
 			signal_from_arduino = get_charge_signal();
 			printf(".");
 		}
-		printf("\nInterrupted!\n");
+		//printf("\nInterrupted!\n");
 		return NONE;
 	}
 	else 
@@ -151,45 +159,6 @@ int charge(int corner)
 		printf("Charge: WTF\n");
 		return ERROR;
 	}
-	
-	/*if(signal_from_arduino == ERROR)
-	{
-		send_charge_signal(NONE);
-		signal_from_arduino = wait_for_change_from_arduino(ERROR);
-		if(signal_from_arduino != WAITING_FOR_SIGNAL)
-			printf("Expected waiting for signal after recieving initial error (tried to charge but failed)\n");
-		return ERROR;
-	}
-	else if(signal_from_arduino == CHARGING)
-	{
-		printf("entered charging statement\n\n");
-		int prev_signal_from_arduino = signal_from_arduino;
-		int start_time = CURRENT_TIME;
-		WATCHDOG_ACTIVE = 1;
-		while(!TIMER_INTERRUPT && signal_from_arduino != prev_signal_from_arduino)
-		{
-			signal_from_arduino = get_charge_signal();
-			printf("Time: %f\n",CURRENT_TIME);
-			sleep(1.0);
-		}
-		WATCHDOG_ACTIVE = 0;
-		if(signal_from_arduino == DONE)
-			return_value = DONE;
-		else if(signal_from_arduino == ERROR)
-			return_value = ERROR;
-		else
-			return_value = TIME_UP;
-		send_charge_signal(NONE);
-		signal_from_arduino = wait_for_change_from_arduino(signal_from_arduino);
-		if(signal_from_arduino != WAITING_FOR_SIGNAL)
-			printf("We successfully started charging or timer interrupt, or we're full.\n");
-		return return_value;
-	}
-	else if(signal_from_arduino == DONE)
-		return DONE;
-	else
-		printf("WTF\n");
-	return ERROR;*/
 }
 
 int wait_for_change_from_arduino(int prev_signal_from_arduino)
