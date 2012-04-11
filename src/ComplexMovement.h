@@ -26,16 +26,21 @@ void move_from_mid_to(int barcode);
 
 void top()
 {
-    move_forward_off_wall(4.2*12.0, SPEED);
+    move_forward_off_wall(3.2*12.0, SPEED);
+	move_arc(90.,8.0,SPEED,SPEED-7);
+	block_digo_done();
+	move_arc(-90.,8.0,SPEED-7,SPEED);
+	block_digo_done();
+	run_into_wall(SPEED);
 	//dist += analog_to_inches_avg(rightFrontIR,10);
-    turn_right(90, SPEED);
+    /*turn_right(90, SPEED);
 	block_digo_done();
     move_backward((1.2*12.0), SPEED);
 	block_digo_done();
     turn_left(90, SPEED);
 	//printf("turning left!\n");
 	block_digo_done();
-	run_into_wall(SPEED);
+	run_into_wall(SPEED);*/
 	/*move_forward(1.2*12.0,SPEED);
 	block_digo_done();
 	///////////////////////////////////
@@ -81,45 +86,9 @@ void bottom()
 
 void diagonal()
 {
-	move_arc(95, 12*3.2525252525252525252);
+	move_arc(95, 12*3.2525252525252525252,SPEED,SPEED-2);
 	block_digo_done();
 	run_into_wall(SPEED);
-    /*move_forward_off_wall(4.2*12.0, SPEED);
-	//dist += analog_to_inches_avg(rightFrontIR,10);
-    turn_right(90, SPEED);
-	block_digo_done();
-    move_backward((1.2*12.0), SPEED);
-	block_digo_done();
-    turn_left(90, SPEED);
-	//printf("turning left!\n");
-	block_digo_done();
-	run_into_wall(SPEED);
-    move_forward(1.2*12.0,SPEED);
-	block_digo_done();
-	///////////////////////////////////
-    move_forward(.6*12.0,WALL_SPEED);
-	block_digo_done();
-	///////////////////////////////////
-	move_backward(WALL_TURN_DISTANCE,SPEED);
-	block_digo_done();
-	turn_left(90.0,SPEED);
-	block_digo_done();
-	move_forward_off_wall(4.2*12.0, SPEED);
-	//dist += analog_to_inches_avg(rightFrontIR,10);
-    turn_right(90, SPEED);
-	block_digo_done();
-    move_backward((1.2*12.0), SPEED);
-	block_digo_done();
-    turn_left(90, SPEED);
-	//printf("turning left!\n");
-	block_digo_done();
-	run_into_wall(SPEED);
-    move_forward(1.2*12.0,SPEED);
-	block_digo_done();
-	///////////////////////////////////
-    move_forward(.6*12.0,WALL_SPEED);
-	block_digo_done();
-	///////////////////////////////////*/
 	move_backward(WALL_TURN_DISTANCE,SPEED);
 	block_digo_done();
 	turn_left(90.0,SPEED);
@@ -241,11 +210,9 @@ void move_from_mid_to(int barcode)
 		turn_left(90, SPEED);
 		block_digo_done();
 		move_forward_off_wall((1.9*12)-3.0, SPEED);
-		turn_right(90.0, SPEED);
+		move_arc(90.,8.0,SPEED,SPEED-7);
 		block_digo_done();
-		move_backward((1.0*12),SPEED);
-		block_digo_done();
-		turn_left(90.0,SPEED);
+		move_arc(-90.,8.0,SPEED-7,SPEED);
 		block_digo_done();
 		run_into_wall(SPEED);
 		/*move_forward(2.0*12.0,SPEED);

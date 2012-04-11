@@ -32,14 +32,22 @@ int stop();
 int move_forward_off_wall(float dist, int speed);
 int move_backward_off_wall(float dist, int speed);
 int run_into_wall(int);
-int move_arc(float, float);
+int move_arc(float, float, int, int);
 
 
-int move_arc(float theta, float radius)
+int move_arc(float theta, float radius, int rwspeed, int lwspeed)
 {
 	float right_wheel_length = (theta/360.0)*(2*PIE*(radius+(.5*WHEEL_BASE)));
 	float left_wheel_length = (theta/360.0)*(2*PIE*(radius-(.5*WHEEL_BASE)));
-	drive_direct(SPEED, right_wheel_length, SPEED-2, left_wheel_length);
+	if(theta>0)
+	{
+		drive_direct(rwspeed, right_wheel_length, lwspeed, left_wheel_length);
+	}
+	else
+	{
+		
+		drive_direct(rwspeed,left_wheel_length*-1, lwspeed,right_wheel_length*-1);
+	}
 }
 
 int run_into_wall(int speed)

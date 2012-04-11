@@ -22,5 +22,5 @@ void main()
 		printf("SOURCE_ORDER: {%d,%d,%d} @ %f\n\n",SOURCE_ORDER[0],SOURCE_ORDER[1],SOURCE_ORDER[2],cycle_start_time);
 		sleep(.1);
 	}
-	
+	serializer_disconnect();
 }

@@ -19,6 +19,7 @@ int main()
 			printf("sending: HYDRO\n");
 			get_charge_signal();
 			printf("\npress: B to stop\n\n\n");
+			sleep(.5);
 		}
 	}
 	else if(b_button())
@@ -30,6 +31,7 @@ int main()
 			printf("sending: SOLAR\n");
 			get_charge_signal();
 			printf("\npress: B to stop\n\n\n");
+			sleep(.5);
 		}
 	}
 	else if(up_button())
@@ -41,6 +43,7 @@ int main()
 			printf("sending: FLAG\n");
 			get_charge_signal();
 			printf("\npress: B to stop\n\n\n");
+			sleep(.5);
 		}
 	}
 	while(b_button());
@@ -50,6 +53,7 @@ int main()
 		printf("sending NONE\n");
 		get_charge_signal();
 		printf("\nPress: B to end the program\n\n\n");
+		sleep(.5);
 	}
 	
 	
