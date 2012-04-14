@@ -99,13 +99,16 @@ int calculate_destination()
 	if(CHARGED == DONE && CURRENT != FLAG) return FLAG;
 	
 	else if(phase == 0)
+	{
 		if(SOURCE_ORDER[phase] == UNKNOWN)
 			return light_check();
 		else if(SOURCE_ORDER[phase] == SOLAR || SOURCE_ORDER[phase] == HYDRO)
 			return SOURCE_ORDER[0];
 		else 
 			return MID;
+	}
 	else if(phase == 1)
+	{
 		if(SOURCE_ORDER[0] == SOLAR || SOURCE_ORDER[0] == HYDRO)
 			return opposite(SOURCE_ORDER[0]);
 		else if(SOURCE_ORDER[phase] == UNKNOWN)
@@ -114,7 +117,9 @@ int calculate_destination()
 			return SOURCE_ORDER[phase+1];
 	    else
 			return MID;
+	}
 	else if(phase == 2)
+	{
 		if(SOURCE_ORDER[2] != WIND && SOURCE_ORDER[2] != UNKNOWN)
 			return SOURCE_ORDER[2];
 		else if(SOURCE_ORDER[2] == UNKNOWN && CURRENT != MID)
@@ -123,8 +128,14 @@ int calculate_destination()
 			return light_check();
 		else
 			return HYDRO;
+	}
 	else
-		return HYDRO;
+	{
+		if(CURRENT == SOLAR)
+			return SOLAR;
+		else
+			return HYDRO;
+	}
 }
 
 void update_source_order(float cycle_start_time)

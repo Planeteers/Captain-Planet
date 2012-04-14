@@ -1,7 +1,7 @@
 #ifndef CAPTAIN_PLANET_GLOBALS_H
 #define CAPTAIN_PLANET_GLOBALS_H
 
-#define NO_ARDUINO
+//#define NO_ARDUINO
 
 #define NUM_PHASES 4
 #define COMP_TIME_LENGTH 300.0
@@ -36,7 +36,7 @@
 #define GPIO_LINE_OUT_ONE 6 //yellow
 #define GPIO_LINE_OUT_TWO 7 //green
 
-#define ACCEL_THRESHOLD 45
+#define ACCEL_THRESHOLD 60
 
 const enum {
 	CHARGING = 0,

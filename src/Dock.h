@@ -115,6 +115,7 @@ int charge(int corner)
 		printf("in set state\n");
 	}
 	
+	
 	printf("dealing with response from setting state to corner\n");
 	if(signal_from_arduino == CHARGING)
 	{
@@ -132,33 +133,26 @@ int charge(int corner)
 	else if(signal_from_arduino == ERROR)
 	{
 		printf("We got a error when trying to charge!\n");
-		return ERROR;
+		return_value = ERROR;
 	}
 	
 	
 	///Returning Done all the time even when expecting none
 	printf("interrpreting signal from charge phase\n");
 	if(signal_from_arduino == DONE)
-		return DONE;
+		return_value = DONE;
 	else if(signal_from_arduino == ERROR)
-		return ERROR;
-	else if(signal_from_arduino == CHARGING)
-	{
+		return_value = ERROR;
 		//printf("Interrupting charging\n");
-		while(signal_from_arduino != WAITING_FOR_SIGNAL)
-		{
-			send_charge_signal(NONE);
-			signal_from_arduino = get_charge_signal();
-			printf(".");
-		}
-		//printf("\nInterrupted!\n");
-		return NONE;
-	}
-	else 
+	while(signal_from_arduino != WAITING_FOR_SIGNAL)
 	{
-		printf("Charge: WTF\n");
-		return ERROR;
-	}
+		send_charge_signal(NONE);
+		signal_from_arduino = get_charge_signal();
+		printf(".");
+	} 
+
+	//printf("\nInterrupted!\n");
+	return return_value;
 }
 
 int wait_for_change_from_arduino(int prev_signal_from_arduino)

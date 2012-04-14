@@ -31,7 +31,7 @@ void top()
 	block_digo_done();
 	move_arc(-90.,8.0,SPEED-7,SPEED);
 	block_digo_done();
-	run_into_wall(SPEED);
+	run_into_wall(SPEED,10);
 	//dist += analog_to_inches_avg(rightFrontIR,10);
     /*turn_right(90, SPEED);
 	block_digo_done();
@@ -40,7 +40,7 @@ void top()
     turn_left(90, SPEED);
 	//printf("turning left!\n");
 	block_digo_done();
-	run_into_wall(SPEED);*/
+	run_into_wall(SPEED,10);*/
 	/*move_forward(1.2*12.0,SPEED);
 	block_digo_done();
 	///////////////////////////////////
@@ -61,7 +61,7 @@ void bottom()
 	block_digo_done();
     turn_right(90, SPEED);
 	block_digo_done();
-	run_into_wall(SPEED);
+	run_into_wall(SPEED,10);
     /*move_forward(1.2*12.0,SPEED);
 	block_digo_done();
 	///////////////////////////////////
@@ -75,7 +75,7 @@ void bottom()
 	move_backward_off_wall(4.1*12.0,SPEED);
 	turn_right(90.,SPEED);
 	block_digo_done();
-	run_into_wall(SPEED);
+	run_into_wall(SPEED,10);
 	/*move_forward(5.0,WALL_SPEED);
 	block_digo_done();*/
 	move_backward(WALL_TURN_DISTANCE,SPEED);
@@ -86,9 +86,9 @@ void bottom()
 
 void diagonal()
 {
-	move_arc(95, 12*3.2525252525252525252,SPEED,SPEED-2);
+	move_arc(95, 12*3.,SPEED,SPEED-2);
 	block_digo_done();
-	run_into_wall(SPEED);
+	run_into_wall(SPEED,10);
 	move_backward(WALL_TURN_DISTANCE,SPEED);
 	block_digo_done();
 	turn_left(90.0,SPEED);
@@ -102,7 +102,7 @@ void move_to_mid_from(int orginCorner)
 		move_forward_off_wall((2.*12)-3.0, SPEED);
 		turn_right(90, SPEED);
 		block_digo_done();
-		run_into_wall(SPEED);
+		run_into_wall(SPEED,10);
 		/*move_forward(5, WALL_SPEED);
 		block_digo_done();*/
 		move_backward(2.4, SPEED);
@@ -118,7 +118,7 @@ void move_to_mid_from(int orginCorner)
 		block_digo_done();
 		turn_right(90, SPEED);
 		block_digo_done();
-		run_into_wall(SPEED);
+		run_into_wall(SPEED,10);
 		/*move_forward(1.8*12.0,SPEED);
 		block_digo_done();*/
 		///////////////////////////////////
@@ -132,7 +132,7 @@ void move_to_mid_from(int orginCorner)
 		move_backward_off_wall(2.0*12.0,SPEED);
 		turn_right(90,SPEED);
 		block_digo_done();
-		run_into_wall(SPEED);
+		run_into_wall(SPEED,10);
 		/*move_forward(5,WALL_SPEED);
 		block_digo_done();*/
 		move_backward(2.4,SPEED);
@@ -209,12 +209,12 @@ void move_from_mid_to(int barcode)
 		// Go to Hydro
 		turn_left(90, SPEED);
 		block_digo_done();
-		move_forward_off_wall((1.9*12)-3.0, SPEED);
+		move_forward_off_wall((1.5*12)-3.0, SPEED);
 		move_arc(90.,8.0,SPEED,SPEED-7);
 		block_digo_done();
 		move_arc(-90.,8.0,SPEED-7,SPEED);
 		block_digo_done();
-		run_into_wall(SPEED);
+		run_into_wall(SPEED,10);
 		/*move_forward(2.0*12.0,SPEED);
 		block_digo_done();*/
 		///////////////////////////////////
@@ -234,7 +234,7 @@ void move_from_mid_to(int barcode)
 		move_backward_off_wall(1.7*12, SPEED);
 		turn_right(90, SPEED);
 		block_digo_done();
-		run_into_wall(SPEED);
+		run_into_wall(SPEED,10);
 		/*block_digo_done();
 		move_forward(5, WALL_SPEED);*/
 		//block_digo_done();
@@ -248,7 +248,7 @@ void move_from_mid_to(int barcode)
 
 void start_movement()
 {
-	run_into_wall(SPEED);
+	run_into_wall(SPEED,10);
 	/*move_forward(3.0*12, SPEED);
 	block_digo_done();*/
 	/*move_forward(.5*12, WALL_SPEED);

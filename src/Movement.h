@@ -31,7 +31,7 @@ int straighten_off_wall(int right,int speed);
 int stop();
 int move_forward_off_wall(float dist, int speed);
 int move_backward_off_wall(float dist, int speed);
-int run_into_wall(int);
+int run_into_wall(int,int);
 int move_arc(float, float, int, int);
 
 
@@ -50,8 +50,10 @@ int move_arc(float theta, float radius, int rwspeed, int lwspeed)
 	}
 }
 
-int run_into_wall(int speed)
+int run_into_wall(int speed, int time)
 {
+	int start_time = CURRENT_TIME;
+	
 	move_forward_at(speed);
 	
 	int i;
@@ -62,7 +64,7 @@ int run_into_wall(int speed)
 	{
 		actual = accel_x();
 		//printf("act: %d\n",actual);
-		if(-ACCEL_THRESHOLD > actual)
+		if(-ACCEL_THRESHOLD > actual || start_time+time<=CURRENT_TIME)
 			interrupt = 1;
 	}
 	printf("act: %d\n",actual);
