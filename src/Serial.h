@@ -74,6 +74,9 @@ int   pid_init(void) {return 0;}
 int   is_done(void) {return 0;}
 int   illegal_command(void) {return 0;}
 void  serializer_disconnect(void) {}
+void clear_encoders() {}
+int set_gpio(int pin, int value) {return 0;}
+int get_gpio(int pin) {return 0;}
 
 #else
 /**

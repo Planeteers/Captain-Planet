@@ -40,6 +40,8 @@ void docking_phase(int corner)
 		distance = 4;
 	else if(corner == FLAG)
 		distance = 2;
+	else if(corner == SOLAR)
+		distance = 3;
 	move_backward_at(6);
 	bar_straight(-1);
 	stop();
@@ -107,6 +109,12 @@ int charge(int corner)
 		printf("in reset\n");
 	}
 	
+	if(corner == SOLAR && !is_front_light_on())
+	{
+		printf("Trying to charge from solar, but solar isn't on: %d\n",analog10(FRONT_LIGHT_PORT));
+		return SIG_ERROR;
+	}
+	
 	printf("Setting charge state to corner\n");
     while(signal_from_arduino == WAITING_FOR_SIGNAL)
 	{
@@ -127,23 +135,41 @@ int charge(int corner)
 		{
 			printf("charging, time: %f\n",CURRENT_TIME);
 			signal_from_arduino = get_charge_signal();
+			if(signal_from_arduino == -1)
+			{
+				printf("BWAH!!!!\n");
+				signal_from_arduino = get_charge_signal();
+			}
+			printf("sig from ardu: %d\n",signal_from_arduino);
 		}
 		WATCHDOG_ACTIVE = 0;
 	}
-	else if(signal_from_arduino == ERROR)
+	else if(signal_from_arduino == SIG_ERROR)
 	{
 		printf("We got a error when trying to charge!\n");
-		return_value = ERROR;
+		return_value = SIG_ERROR;
 	}
 	
 	
 	///Returning Done all the time even when expecting none
 	printf("interrpreting signal from charge phase\n");
 	if(signal_from_arduino == DONE)
+	{
+		printf("---DONE---\n");
 		return_value = DONE;
-	else if(signal_from_arduino == ERROR)
-		return_value = ERROR;
-		//printf("Interrupting charging\n");
+	}
+	else if(signal_from_arduino == SIG_ERROR)
+	{
+		printf("---ERROR---\n");
+		return_value = SIG_ERROR;
+	}
+	else if(signal_from_arduino == -1)
+	{
+		printf("got invalid signal\n");
+		return_value = SIG_ERROR;
+	}
+	else
+		printf("got something we weren't expecting: %d\n",signal_from_arduino);
 	while(signal_from_arduino != WAITING_FOR_SIGNAL)
 	{
 		send_charge_signal(NONE);
@@ -188,7 +214,7 @@ int get_charge_signal()
 	if(gpio_line_one == 0 && gpio_line_two == 1)
 	{
 		printf("Recieved: ERROR\n");
-		return ERROR;
+		return SIG_ERROR;
 	}
 	if(gpio_line_one == 1 && gpio_line_two == 0)
 	{
@@ -202,8 +228,10 @@ int get_charge_signal()
 	}
 	if(gpio_line_one == -1 || gpio_line_two == -1)
 	{
+		printf("got back invalid signal from gpio\n");
 		return -1;
 	}
+	return -1;
 }
 
 #endif

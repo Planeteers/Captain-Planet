@@ -129,7 +129,7 @@ void move_to_mid_from(int orginCorner)
 		block_digo_done();
 		turn_left(90, SPEED);
 		block_digo_done();
-		move_backward_off_wall(2.0*12.0,SPEED);
+		move_backward_off_wall(2.2*12.0,SPEED);
 		turn_right(90,SPEED);
 		block_digo_done();
 		run_into_wall(SPEED,10);

@@ -28,5 +28,5 @@ int main()
 		}
 	
 	kill_process(TIMER_PROCESS_ID);
-	serializer_disconnect();
+	//serializer_disconnect();
 }

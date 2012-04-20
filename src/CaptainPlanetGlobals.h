@@ -27,8 +27,10 @@
 #define rightTophat 7
 #define rightFrontIR 2
 #define LIGHT_PORT 3
+#define FRONT_LIGHT_PORT 4
 
 #define LIGHT_THRESHOLD 400
+#define FRONT_LIGHT_THRESHOLD 400
 #define BAR_THRESHOLD 700
 
 #define GPIO_LINE_IN_ONE 8  //red
@@ -40,7 +42,7 @@
 
 const enum {
 	CHARGING = 0,
-	ERROR,
+	SIG_ERROR,
 	DONE,
 	WAITING_FOR_SIGNAL,
 	TIME_UP

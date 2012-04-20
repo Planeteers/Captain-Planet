@@ -36,7 +36,7 @@ void start_timer()
 
 void init_captain_planet_with_our_powers_combined()
 {
-	set_each_analog_state(1,1,1,0,1,1,0,0);
+	set_each_analog_state(1,1,1,0,0,0,0,0);
 	serializer_connect();
 	TIMER_PROCESS_ID = start_process(start_timer);
 	TIMER_WATCHDOG_ID = start_process(timer_watchdog);
@@ -127,14 +127,14 @@ int calculate_destination()
 		else if(SOURCE_ORDER[2] == UNKNOWN)
 			return light_check();
 		else
-			return HYDRO;
+			return SOLAR;
 	}
 	else
 	{
-		if(CURRENT == SOLAR)
-			return SOLAR;
-		else
+		if(CURRENT == HYDRO)
 			return HYDRO;
+		else
+			return SOLAR;
 	}
 }
 
@@ -156,7 +156,7 @@ void update_source_order(float cycle_start_time)
 		}
 		else if(CURRENT == SOLAR)
 			SOURCE_ORDER[cycle_phase] = SOLAR;
-		else if(CURRENT == HYDRO && CHARGED == ERROR && SOURCE_ORDER[0] != WIND && SOURCE_ORDER[1]!=WIND)
+		else if(CURRENT == HYDRO && CHARGED == SIG_ERROR && SOURCE_ORDER[0] != WIND && SOURCE_ORDER[1]!=WIND)
 			SOURCE_ORDER[cycle_phase] = WIND;
 		else
 			printf("Not enough information to make an accurate guess of source orders.\n");

@@ -99,4 +99,8 @@ int is_light_on()
 	return(analog10(LIGHT_PORT) <= LIGHT_THRESHOLD);
 }
 
+int is_front_light_on()
+{
+	return(analog10(FRONT_LIGHT_PORT) <= FRONT_LIGHT_THRESHOLD);
+}
 #endif

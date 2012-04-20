@@ -7,7 +7,7 @@ void main()
 	CURRENT = MID;
 	
 	float cycle_start_time;
-	while(!black_button())
+	while(!black_button() && CURRENT_TIME != INVALID_TIME)
 	{
 		//cbc_display_clear();
 		cycle_start_time = CURRENT_TIME;
@@ -21,5 +21,5 @@ void main()
 		printf("SOURCE_ORDER: {%d,%d,%d} @ %f\n\n",SOURCE_ORDER[0],SOURCE_ORDER[1],SOURCE_ORDER[2],		cycle_start_time);
 		sleep(.1);
 	}
-	serializer_disconnect();
+	//serializer_disconnect();
 }
